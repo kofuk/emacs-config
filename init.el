@@ -29,6 +29,7 @@
 (setq transient-mark-mode t)
 (setq hl-line-face 'underline)
 (global-hl-line-mode t)
+(global-linum-mode t)
 
 ;; Display datetime.
 (setq display-time-interval 1)
