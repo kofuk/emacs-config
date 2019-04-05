@@ -87,7 +87,8 @@
 (setq require-final-newline t)
 
 ;; Spell check
-(setq-default ispell-program-name "aspell")
+(when (executable-find "aspell")
+  (setq-default ispell-program-name "aspell"))
 
 ;; Enable flyspell mode automatically only if I edit plain text file.
 ;; flyspell-prog-mode disturb completion from working properly thus I don't
