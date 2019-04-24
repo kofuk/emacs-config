@@ -15,7 +15,7 @@
  '(global-hl-line-mode t)
  '(package-selected-packages
    (quote
-    (undo-tree htmlize w3m web-mode ac-html mmm-mode twittering-mode smartparens git-gutter bison-mode eglot lsp-mode ddskk go-mode magit git-commit nhexl-mode auto-complete company-go)))
+    (highlight-indent-guides undo-tree htmlize w3m web-mode ac-html mmm-mode twittering-mode smartparens git-gutter bison-mode eglot lsp-mode ddskk go-mode magit git-commit nhexl-mode auto-complete company-go)))
  '(smartparens-global-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

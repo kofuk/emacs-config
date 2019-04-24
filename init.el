@@ -145,6 +145,13 @@
   (add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
   (setq web-mode-markup-indent-offset 2))
 
+(use-package highlight-indent-guides
+  :config
+  (setq highlight-indent-guides-auto-character-face-perc 30)
+  (setq highlight-indent-guides-method 'character)
+  (setq highlight-indent-guides-character ?\|)
+  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
+
 ;; Add code here.
 
 
