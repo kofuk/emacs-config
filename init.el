@@ -109,6 +109,18 @@
 (global-set-key "\M-/" 'expand-abbrev)
 (eval-after-load "abbrev" '(global-set-key "\M-/" 'expand-abbrev))
 
+;; Auto insert
+(add-hook 'find-file-hooks 'auto-insert)
+(setq auto-insert-directory "~/.emacs.d/inserts")
+
+;; Postfix completion
+(require 'postfix)
+(global-set-key "\C-z" 'postfix-completion)
+(add-to-list 'postfix-snippets-alist '("c" . "~/.emacs.d/postfix-snippets/c"))
+(add-to-list 'postfix-snippets-alist '("cc" . "~/.emacs.d/postfix-snippets/c++"))
+(add-to-list 'postfix-snippets-alist '("cxx" . "~/.emacs.d/postfix-snippets/c++"))
+(add-to-list 'postfix-snippets-alist '("cpp" . "~/.emacs.d/postfix-snippets/c++"))
+
 ;; Custom location for Customize
 (setq custom-file (expand-file-name "~/.emacs.d/custom.el"))
 (if (file-exists-p (expand-file-name "~/.emacs.d/custom.el"))
