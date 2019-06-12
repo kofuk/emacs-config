@@ -26,6 +26,8 @@
 ;; Display line and column number in mode line.
 (line-number-mode 1)
 (column-number-mode 1)
+(size-indication-mode 1)
+
 (setq transient-mark-mode t)
 (setq hl-line-face 'underline)
 (global-hl-line-mode t)
