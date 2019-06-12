@@ -15,7 +15,7 @@
     (let ((default-directory (expand-file-name "~/.emacs.d/site-lisp-local")))
       (normal-top-level-add-subdirs-to-load-path)))
 
-(load-theme 'manoj-dark t)
+(load-theme 'dracula t)
 
 (global-font-lock-mode 1)
 (setq font-lock-support-mode 'jit-lock-mode)
@@ -44,19 +44,13 @@
 ;; Disable menu bar since it is not needed.
 (menu-bar-mode -1)
 
-;; Use C-h as <Delback>.
-(global-set-key "\C-h" 'delete-backward-char)
+;; Disable toolbar in GUI edition
+(tool-bar-mode -1)
 
 ;; ido
 (ido-mode 1)
 (ido-everywhere 1)
 (setq ido-enable-flex-matching t)
-
-;; Alternate bell
-(defun modeline-bell ()
-  (set-face-background 'mode-line "yellow")
-  (run-at-time "100 millisec" nil #'set-face-background #'mode-line "white"))
-(setq ring-bell-function 'modeline-bell)
 
 ;; Save cursor position
 (if (fboundp 'save-place-mode) (save-place-mode 1) (setq-default save-place t))
@@ -72,14 +66,7 @@
 (setq-default indent-tabs-mode nil)
 (global-whitespace-mode 1)
 
-;; Make inserting line easy
-(defun open-next-line ()
-  "Opens new line in next line of the cursor and move cursor to the line."
-  (interactive)
-  (end-of-line)
-  (newline)
-  (indent-for-tab-command))
-(global-set-key "\C-j" 'open-next-line)
+;; Make easy to split window
 (global-set-key (kbd "C-c -") 'split-window-vertically)
 (global-set-key (kbd "C-c |") 'split-window-horizontally)
 
@@ -95,10 +82,6 @@
   (mapc (lambda (hook)
           (add-hook hook '(lambda () (flyspell-mode 1))))
         '(text-mode-hook)))
-
-;; Set key so that I can switch buffer easily.
-(global-set-key (kbd "C-c <C-right>") 'next-buffer)
-(global-set-key (kbd "C-c <C-left>") 'previous-buffer)
 
 ;; Abbrev
 (setq abbrev-mode t)
