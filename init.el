@@ -5,16 +5,21 @@
 (package-initialize)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
-;; Add subdirs of ~/.emacs.d/site-lisp to load-path if it exists
+;; Add ~/.emacs.d/site-lisp and subdirs of ~/.emacs.d/site-lisp to load-path if it exists
 (if (file-exists-p (expand-file-name "~/.emacs.d/site-lisp"))
-    (let ((default-directory (expand-file-name "~/.emacs.d/site-lisp")))
-      (normal-top-level-add-subdirs-to-load-path)))
+    (progn
+      (let ((default-directory (expand-file-name "~/.emacs.d/site-lisp")))
+        (normal-top-level-add-subdirs-to-load-path))
+      (add-to-list 'load-path (expand-file-name "~/.emacs.d/site-lisp"))))
 
 ;; Add subdirs of ~/.emacs.d/site-lisp-local to load-path if it exists
 (if (file-exists-p (expand-file-name "~/.emacs.d/site-lisp-local"))
     (let ((default-directory (expand-file-name "~/.emacs.d/site-lisp-local")))
       (normal-top-level-add-subdirs-to-load-path)))
 
+(require 'init-install-packages)
+
+;; Dracula Theme
 (load-theme 'dracula t)
 
 (global-font-lock-mode 1)
@@ -31,7 +36,12 @@
 (setq transient-mark-mode t)
 (setq hl-line-face 'underline)
 (global-hl-line-mode t)
-(global-linum-mode t)
+
+;; Show line number in the left
+(global-display-line-numbers-mode)
+
+;; Hit C-h to delete backward rather than show help
+(global-set-key "\C-h" 'delete-backward-char)
 
 ;; Display datetime.
 (setq display-time-interval 1)
@@ -44,10 +54,7 @@
 (setq inhibit-startup-screen t)
 
 ;; Disable menu bar since it is not needed.
-(menu-bar-mode -1)
-
-;; Disable toolbar in GUI edition
-(tool-bar-mode -1)
+(menu-bar-mode 0)
 
 ;; ido
 (ido-mode 1)
@@ -98,14 +105,6 @@
 (add-hook 'find-file-hooks 'auto-insert)
 (setq auto-insert-directory "~/.emacs.d/inserts")
 
-;; Postfix completion
-(require 'postfix)
-(global-set-key "\C-z" 'postfix-completion)
-(add-to-list 'postfix-snippets-alist '("c" . "~/.emacs.d/postfix-snippets/c"))
-(add-to-list 'postfix-snippets-alist '("cc" . "~/.emacs.d/postfix-snippets/c++"))
-(add-to-list 'postfix-snippets-alist '("cxx" . "~/.emacs.d/postfix-snippets/c++"))
-(add-to-list 'postfix-snippets-alist '("cpp" . "~/.emacs.d/postfix-snippets/c++"))
-
 ;; Custom location for Customize
 (setq custom-file (expand-file-name "~/.emacs.d/custom.el"))
 (if (file-exists-p (expand-file-name "~/.emacs.d/custom.el"))
@@ -115,39 +114,10 @@
           (lambda()
             (dired-hide-details-mode)))
 
-(setq skk-jisyo-code 'utf-8)
+(if window-system
+    (require 'init-gui))
 
-(use-package auto-complete
-  :config
-  (ac-config-default)
-  (setq ac-use-menu-map t)
-  (global-auto-complete-mode 1))
-
-(use-package eglot
-  :config
-  (when (executable-find "clangd")
-    (add-to-list 'eglot-server-programs '((c-mode c++-mode ) "clangd"))
-    (add-hook 'c-mode-hook 'eglot-ensure)
-    (add-hook 'c++-mode-hook 'eglot-ensure)))
-
-(use-package undo-tree
-  :config
-  (setq undo-tree-mode-lighter "")
-  (global-undo-tree-mode t))
-
-(use-package web-mode
-  :config
-  (add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
-  (setq web-mode-markup-indent-offset 2))
-
-(use-package highlight-indent-guides
-  :config
-  (setq highlight-indent-guides-auto-character-face-perc 30)
-  (setq highlight-indent-guides-method 'character)
-  (setq highlight-indent-guides-character ?\|)
-  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
+(require 'init-installed-packages)
 
 ;; Add code here.
 
