@@ -15,7 +15,7 @@
  '(global-hl-line-mode t)
  '(package-selected-packages
    (quote
-    (dracula-theme use-package highlight-indent-guides undo-tree htmlize w3m web-mode ac-html mmm-mode twittering-mode smartparens git-gutter bison-mode eglot lsp-mode ddskk go-mode magit git-commit nhexl-mode auto-complete company-go)))
+    (flycheck clang-format company-lsp lsp-ui dracula-theme use-package highlight-indent-guides undo-tree htmlize web-mode smartparens git-gutter lsp-mode ddskk go-mode company-go)))
  '(smartparens-global-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

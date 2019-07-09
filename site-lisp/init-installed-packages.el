@@ -38,12 +38,13 @@
   (setq ac-use-menu-map t)
   (global-auto-complete-mode 1))
 
-(use-package eglot
-  :config
-  (when (executable-find "clangd")
-    (add-to-list 'eglot-server-programs '((c-mode c++-mode ) "clangd"))
-    (add-hook 'c-mode-hook 'eglot-ensure)
-    (add-hook 'c++-mode-hook 'eglot-ensure)))
+;; C/C++ syntax check
+(add-hook 'c-mode-hook 'company-mode)
+(add-hook 'c-mode-hook 'flycheck-mode)
+(add-hook 'c-mode-hook #'lsp)
+(add-hook 'c++-mode-hook 'company-mode)
+(add-hook 'c++-mode-hook 'flycheck-mode)
+(add-hook 'c++-mode-hook #'lsp)
 
 (use-package undo-tree
   :config
