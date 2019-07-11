@@ -38,13 +38,29 @@
   (setq ac-use-menu-map t)
   (global-auto-complete-mode 1))
 
-;; C/C++ syntax check
+;; LSP
 (add-hook 'c-mode-hook 'company-mode)
 (add-hook 'c-mode-hook 'flycheck-mode)
 (add-hook 'c-mode-hook #'lsp)
+(add-hook 'c-mode-hook 'lsp-ui-mode)
 (add-hook 'c++-mode-hook 'company-mode)
 (add-hook 'c++-mode-hook 'flycheck-mode)
 (add-hook 'c++-mode-hook #'lsp)
+(add-hook 'c++-mode-hook 'lsp-ui-mode)
+
+;; Company
+(with-eval-after-load 'company
+  (setq company-transformers '(company-sort-by-backend-importance))
+  (setq company-idle-delay 0)
+  (setq company-minimum-prefix-length 2)
+  (setq company-selection-wrap-around t)
+  (setq completion-ignore-case t)
+  (setq company-deabbrev-downcase nil)
+  (global-set-key (kbd "C-M-i") 'company-complete)
+  (define-key company-active-map (kbd "C-n") 'company-select-next)
+  (define-key company-active-map (kbd "C-p") 'company-select-previous)
+  (define-key company-active-map (kbd "C-h") nil)
+  (define-key company-active-map (kbd "C-S-h") 'company-show-doc-buffer))
 
 (use-package undo-tree
   :config
