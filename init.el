@@ -56,11 +56,6 @@
 ;; Disable menu bar since it is not needed.
 (menu-bar-mode 0)
 
-;; ido
-(ido-mode 1)
-(ido-everywhere 1)
-(setq ido-enable-flex-matching t)
-
 ;; Save cursor position
 (if (fboundp 'save-place-mode) (save-place-mode 1) (setq-default save-place t))
 
