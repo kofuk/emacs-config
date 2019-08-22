@@ -72,7 +72,9 @@
   (add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
-  (setq web-mode-markup-indent-offset 2))
+  (setq web-mode-markup-indent-offset 2)
+  (setq web-mode-auto-close-style 2)
+  (setq web-mode-enable-current-element-highlight t))
 
 (use-package highlight-indent-guides
   :config
