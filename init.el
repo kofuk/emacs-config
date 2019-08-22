@@ -62,8 +62,10 @@
 ;; Follow symbolic links to versioned files
 (setq vc-follow-symlinks t)
 
-;; Don't make backup file
-(setq make-backup-files t)
+;; Backup file
+(setq backup-directory-alist '((".*" . "~/.emacs.d/backups")))
+(setq auto-save-default nil)
+(setq create-lockfiles nil)
 
 ;; Show whitespaces
 (setq whitespace-style '(face trailing tabs tab-mark))
