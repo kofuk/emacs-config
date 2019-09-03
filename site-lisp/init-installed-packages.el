@@ -48,6 +48,10 @@
 (add-hook 'c++-mode-hook #'lsp)
 (add-hook 'c++-mode-hook 'lsp-ui-mode)
 
+;; C/C++ comment style
+(add-hook 'c-mode-common-hook
+          (lambda () (c-toggle-comment-style 1)))
+
 ;; Company
 (with-eval-after-load 'company
   (setq company-transformers '(company-sort-by-backend-importance))
