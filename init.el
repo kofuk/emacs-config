@@ -38,7 +38,9 @@
 (global-hl-line-mode t)
 
 ;; Show line number in the left
-(global-display-line-numbers-mode)
+(if (version<= "26.0.50" emacs-version)
+    (global-display-line-numbers-mode)
+  (global-linum-mode t))
 
 ;; Hit C-h to delete backward rather than show help
 (global-set-key "\C-h" 'delete-backward-char)
