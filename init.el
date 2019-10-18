@@ -42,9 +42,6 @@
     (global-display-line-numbers-mode)
   (global-linum-mode t))
 
-;; Hit C-h to delete backward rather than show help
-(global-set-key "\C-h" 'delete-backward-char)
-
 ;; Display datetime.
 (setq display-time-interval 1)
 (setq display-time-string-forms
