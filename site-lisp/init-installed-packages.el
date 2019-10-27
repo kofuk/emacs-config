@@ -31,6 +31,7 @@
 (add-to-list 'postfix-snippets-alist '("cpp" . "~/.emacs.d/postfix-snippets/c++"))
 
 (setq skk-jisyo-code 'utf-8)
+(setq skk-kutouten-type 'en)
 
 (use-package auto-complete
   :config
