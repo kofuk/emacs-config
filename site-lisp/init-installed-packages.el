@@ -33,12 +33,6 @@
 (setq skk-jisyo-code 'utf-8)
 (setq skk-kutouten-type 'en)
 
-(use-package auto-complete
-  :config
-  (ac-config-default)
-  (setq ac-use-menu-map t)
-  (global-auto-complete-mode 1))
-
 ;; LSP
 (add-hook 'c-mode-hook 'company-mode)
 (add-hook 'c-mode-hook 'flycheck-mode)
@@ -87,6 +81,10 @@
   (setq highlight-indent-guides-method 'character)
   (setq highlight-indent-guides-character ?\|)
   (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
+
+(use-package yasnippet
+  :config
+  (yas-global-mode 1))
 
 (provide 'init-installed-packages)
 ;;; init-installed-packages.el ends here

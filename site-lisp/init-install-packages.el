@@ -15,7 +15,6 @@
       (package-install pkg))))
 
 
-(init-package:install-package 'auto-complete)
 (init-package:install-package 'clang-format)
 (init-package:install-package 'company-go)
 (init-package:install-package 'company-lsp)
@@ -32,6 +31,7 @@
 (init-package:install-package 'undo-tree)
 (init-package:install-package 'use-package)
 (init-package:install-package 'web-mode)
+(init-package:install-package 'yasnippet)
 
 
 (provide 'init-install-packages)
