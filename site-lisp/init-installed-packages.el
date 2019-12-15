@@ -30,9 +30,6 @@
 (add-to-list 'postfix-snippets-alist '("cxx" . "~/.emacs.d/postfix-snippets/c++"))
 (add-to-list 'postfix-snippets-alist '("cpp" . "~/.emacs.d/postfix-snippets/c++"))
 
-(setq skk-jisyo-code 'utf-8)
-(setq skk-kutouten-type 'en)
-
 ;; LSP
 (add-hook 'c-mode-hook 'company-mode)
 (add-hook 'c-mode-hook 'flycheck-mode)

@@ -9,7 +9,6 @@
     ((java-mode . "java")
      (awk-mode . "awk")
      (other . "bsd"))))
- '(default-input-method "japanese-skk")
  '(global-fixmee-mode t)
  '(global-git-gutter-mode t)
  '(global-hl-line-mode t)
@@ -17,7 +16,7 @@
  '(lsp-ui-sideline-enable t)
  '(package-selected-packages
    (quote
-    (yasnippet clang-format company-lsp lsp-ui dracula-theme use-package highlight-indent-guides undo-tree htmlize web-mode smartparens git-gutter lsp-mode ddskk go-mode company-go)))
+    (yasnippet clang-format company-lsp lsp-ui dracula-theme use-package highlight-indent-guides undo-tree htmlize web-mode smartparens git-gutter lsp-mode go-mode company-go)))
  '(smartparens-global-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
