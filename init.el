@@ -75,6 +75,9 @@
 (global-set-key (kbd "C-c -") 'split-window-vertically)
 (global-set-key (kbd "C-c |") 'split-window-horizontally)
 
+;; Disable annoying key
+(global-set-key "\C-v" nil)
+
 ;; Make Emacs to put '\n' at the end of file
 (setq require-final-newline t)
 
