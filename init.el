@@ -100,6 +100,9 @@
 (global-set-key "\M-/" 'expand-abbrev)
 (eval-after-load "abbrev" '(global-set-key "\M-/" 'expand-abbrev))
 
+;; Avoid messing up gnome-terminal when chars with ambiguous width are displayed.
+(set-language-environment "English")
+
 ;; Auto insert
 (add-hook 'find-file-hooks 'auto-insert)
 (setq auto-insert-directory "~/.emacs.d/inserts")
