@@ -34,20 +34,13 @@
 (size-indication-mode 1)
 
 (setq transient-mark-mode t)
-(setq hl-line-face 'underline)
+(setq hl-line-face 'hl-line)
 (global-hl-line-mode t)
 
 ;; Show line number in the left
 (if (version<= "26.0.50" emacs-version)
     (global-display-line-numbers-mode)
   (global-linum-mode t))
-
-;; Display datetime.
-(setq display-time-interval 1)
-(setq display-time-string-forms
-      '((format "%s/%s/%s(%s) %s:%s:%s" year month day dayname 24-hours minutes seconds)))
-(display-time)
-(display-time-mode 1)
 
 ;; Start up screen
 (setq inhibit-startup-screen t)
@@ -91,15 +84,6 @@
           (add-hook hook '(lambda () (flyspell-mode 1))))
         '(text-mode-hook)))
 
-;; Abbrev
-(setq abbrev-mode t)
-(setq save-abbrevs t)
-(quietly-read-abbrev-file)
-(global-set-key "\C-x'" 'just-one-space)
-(global-set-key "\M- " 'dabbrev-expand)
-(global-set-key "\M-/" 'expand-abbrev)
-(eval-after-load "abbrev" '(global-set-key "\M-/" 'expand-abbrev))
-
 ;; Avoid messing up gnome-terminal when chars with ambiguous width are displayed.
 (set-language-environment "English")
 
@@ -116,8 +100,15 @@
           (lambda()
             (dired-hide-details-mode)))
 
-(if window-system
-    (require 'init-gui))
+;; Settings to use GUI comfortably.
+(tool-bar-mode 0)
+(setq default-frame-alist '((width . 100)
+                            (height . 35)
+                            (cursor-type . bar)))
+(setq frame-title-format "%b - Emacs")
+
+;; Overwrite selected area
+(delete-selection-mode 1)
 
 (require 'init-installed-packages)
 

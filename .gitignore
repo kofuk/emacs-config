@@ -9,5 +9,7 @@
 /init-local.el
 /network-security.data
 /tramp
+/games
+/url
 /backups
 /.lsp-session-v*
