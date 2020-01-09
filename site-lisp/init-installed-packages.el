@@ -85,7 +85,8 @@
 
 (use-package mozc
   :config
-  (setq default-input-method "japanese-mozc"))
+  (setq default-input-method "japanese-mozc")
+  (setq mozc-candidate-style 'echo-area))
 
 (provide 'init-installed-packages)
 ;;; init-installed-packages.el ends here
