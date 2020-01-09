@@ -25,6 +25,8 @@
 (init-package:install-package 'htmlize)
 (init-package:install-package 'lsp-mode)
 (init-package:install-package 'lsp-ui)
+(if (executable-find "mozc_emacs_helper")
+    (init-package:install-package 'mozc))
 (init-package:install-package 'smartparens)
 (init-package:install-package 'undo-tree)
 (init-package:install-package 'use-package)

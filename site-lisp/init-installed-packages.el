@@ -83,5 +83,9 @@
   :config
   (yas-global-mode 1))
 
+(use-package mozc
+  :config
+  (setq default-input-method "japanese-mozc"))
+
 (provide 'init-installed-packages)
 ;;; init-installed-packages.el ends here
