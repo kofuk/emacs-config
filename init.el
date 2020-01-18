@@ -28,10 +28,11 @@
 (show-paren-mode t)
 (setq show-paren-style 'mixed)
 
-;; Display line and column number in mode line.
+;; Mode line
 (line-number-mode 1)
 (column-number-mode 1)
 (size-indication-mode 1)
+(display-battery-mode 1)
 
 (setq transient-mark-mode t)
 (setq hl-line-face 'hl-line)
