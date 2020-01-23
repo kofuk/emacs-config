@@ -16,7 +16,7 @@
  '(lsp-ui-sideline-enable t)
  '(package-selected-packages
    (quote
-    (mozc yasnippet clang-format company-lsp lsp-ui dracula-theme use-package highlight-indent-guides undo-tree htmlize web-mode smartparens git-gutter lsp-mode go-mode company-go)))
+    (mozc yasnippet clang-format company-lsp lsp-ui dracula-theme use-package highlight-indent-guides undo-tree htmlize web-mode git-gutter lsp-mode go-mode company-go)))
  '(smartparens-global-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
