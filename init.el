@@ -72,6 +72,13 @@
 ;; Disable annoying key
 (global-set-key "\C-v" nil)
 
+(defun revert-buffer-noconfirm ()
+  "Reverts buffer data from assciated file, without any prompt"
+  (interactive)
+  (revert-buffer 1 1 1))
+
+(global-set-key (kbd "<f5>") 'revert-buffer-noconfirm)
+
 ;; Make Emacs to put '\n' at the end of file
 (setq require-final-newline t)
 
