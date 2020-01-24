@@ -113,6 +113,12 @@
 (setq default-frame-alist '((width . 100)
                             (height . 35)
                             (cursor-type . bar)))
+;; Use Noto font for kanji and half-width katakana
+(add-hook 'after-make-frame-functions
+          (lambda (frame)
+            (set-fontset-font t 'unicode "-GOOG-Noto Sans CJK JP-normal-normal-normal-*-*-*-*-*-*-0-iso10646-1")))
+(set-fontset-font t 'unicode "-GOOG-Noto Sans CJK JP-normal-normal-normal-*-*-*-*-*-*-0-iso10646-1")
+
 (setq frame-title-format "%b - Emacs")
 
 ;; Overwrite selected area
