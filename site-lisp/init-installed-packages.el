@@ -45,7 +45,9 @@
           (lambda () (c-toggle-comment-style 1)))
 
 ;; Company
-(with-eval-after-load 'company
+(use-package company
+  :config
+  (global-company-mode 1)
   (setq company-transformers '(company-sort-by-backend-importance))
   (setq company-idle-delay 0)
   (setq company-minimum-prefix-length 2)
