@@ -65,6 +65,8 @@
 (setq-default indent-tabs-mode nil)
 (global-whitespace-mode 1)
 
+(setq read-file-name-completion-ignore-case t)
+
 ;; Make easy to split window
 (global-set-key (kbd "C-c -") 'split-window-vertically)
 (global-set-key (kbd "C-c |") 'split-window-horizontally)
