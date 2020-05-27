@@ -126,6 +126,11 @@
 ;; Overwrite selected area
 (delete-selection-mode 1)
 
+(load "feeds")
+(defun news ()
+  (interactive)
+  (newsticker-show-news))
+
 (require 'init-installed-packages)
 
 ;; Add code here.
