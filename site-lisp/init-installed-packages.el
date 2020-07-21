@@ -60,6 +60,11 @@
   (define-key company-active-map (kbd "C-h") nil)
   (define-key company-active-map (kbd "C-S-h") 'company-show-doc-buffer))
 
+(use-package keyfreq
+  :config
+  (keyfreq-mode 1)
+  (keyfreq-autosave-mode 1))
+
 (use-package undo-tree
   :config
   (setq undo-tree-mode-lighter "")

@@ -25,6 +25,7 @@
 (init-package:install-package 'go-mode)
 (init-package:install-package 'highlight-indent-guides)
 (init-package:install-package 'htmlize)
+(init-package:install-package 'keyfreq)
 (init-package:install-package 'lsp-mode)
 (init-package:install-package 'lsp-ui)
 (if (executable-find "mozc_emacs_helper")
