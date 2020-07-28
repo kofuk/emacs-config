@@ -65,6 +65,13 @@
   (keyfreq-mode 1)
   (keyfreq-autosave-mode 1))
 
+(use-package satysfi
+  :config
+  (add-to-list 'auto-mode-alist '("\\.saty$" . satysfi-mode))
+  (add-to-list 'auto-mode-alist '("\\.satyh$" . satysfi-mode))
+  (if (equal system-type 'gnu/linux)
+      (setq satysfi-pdf-viewer-command "evince")))
+
 (use-package undo-tree
   :config
   (setq undo-tree-mode-lighter "")

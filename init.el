@@ -17,6 +17,8 @@
     (let ((default-directory (expand-file-name "~/.emacs.d/site-lisp-local")))
       (normal-top-level-add-subdirs-to-load-path)))
 
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/contrib"))
+
 (require 'init-install-packages)
 
 ;; Dracula Theme
