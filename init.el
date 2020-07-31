@@ -22,7 +22,7 @@
 (require 'init-install-packages)
 
 ;; Dracula Theme
-(load-theme 'dracula t)
+(load-theme 'wombat t)
 
 (global-font-lock-mode 1)
 (setq font-lock-support-mode 'jit-lock-mode)

@@ -20,7 +20,6 @@
 (init-package:install-package 'company-go)
 (init-package:install-package 'company-lsp)
 (init-package:install-package 'csv-mode)
-(init-package:install-package 'dracula-theme)
 (init-package:install-package 'git-gutter)
 (init-package:install-package 'go-mode)
 (init-package:install-package 'highlight-indent-guides)
