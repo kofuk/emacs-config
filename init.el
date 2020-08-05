@@ -37,8 +37,10 @@
 (display-battery-mode 1)
 
 (setq transient-mark-mode t)
-(setq hl-line-face 'hl-line)
-(global-hl-line-mode t)
+(setq hl-line-face 'none)
+(set-cursor-color "white")
+
+(setq-default indicate-empty-lines t)
 
 ;; Show line number in the left
 (if (version<= "26.0.50" emacs-version)
