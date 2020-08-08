@@ -30,16 +30,6 @@
 (add-to-list 'postfix-snippets-alist '("cxx" . "~/.emacs.d/postfix-snippets/c++"))
 (add-to-list 'postfix-snippets-alist '("cpp" . "~/.emacs.d/postfix-snippets/c++"))
 
-;; LSP
-(add-hook 'c-mode-hook 'company-mode)
-(add-hook 'c-mode-hook 'flycheck-mode)
-(add-hook 'c-mode-hook #'lsp)
-(add-hook 'c-mode-hook 'lsp-ui-mode)
-(add-hook 'c++-mode-hook 'company-mode)
-(add-hook 'c++-mode-hook 'flycheck-mode)
-(add-hook 'c++-mode-hook #'lsp)
-(add-hook 'c++-mode-hook 'lsp-ui-mode)
-
 ;; C/C++ comment style
 (add-hook 'c-mode-common-hook
           (lambda () (c-toggle-comment-style 1)))
@@ -59,6 +49,14 @@
   (define-key company-active-map (kbd "C-p") 'company-select-previous)
   (define-key company-active-map (kbd "C-h") nil)
   (define-key company-active-map (kbd "C-S-h") 'company-show-doc-buffer))
+
+(use-package eglot
+  :config
+  (dolist (mode '(c-mode c++-mode))
+    (add-to-list 'eglot-server-programs
+                 `(,mode . ("clangd"))))
+  (dolist (hook '(c-mode-hook c++-mode-hook))
+    (add-hook hook 'eglot-ensure)))
 
 (use-package keyfreq
   :config
