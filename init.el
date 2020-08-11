@@ -5,19 +5,20 @@
 (package-initialize)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
+(setq init-path (file-name-directory load-file-name))
+
 ;; Add ~/.emacs.d/site-lisp and subdirs of ~/.emacs.d/site-lisp to load-path if it exists
-(if (file-exists-p (expand-file-name "~/.emacs.d/site-lisp"))
-    (progn
-      (let ((default-directory (expand-file-name "~/.emacs.d/site-lisp")))
-        (normal-top-level-add-subdirs-to-load-path))
-      (add-to-list 'load-path (expand-file-name "~/.emacs.d/site-lisp"))))
+(when (file-exists-p (concat init-path "site-lisp"))
+  (let ((default-directory (concat init-path "site-lisp")))
+    (normal-top-level-add-subdirs-to-load-path))
+  (add-to-list 'load-path (concat init-path "site-lisp")))
 
 ;; Add subdirs of ~/.emacs.d/site-lisp-local to load-path if it exists
-(if (file-exists-p (expand-file-name "~/.emacs.d/site-lisp-local"))
-    (let ((default-directory (expand-file-name "~/.emacs.d/site-lisp-local")))
+(if (file-exists-p (concat init-path "site-lisp-local"))
+    (let ((default-directory (concat init-path "site-lisp-local")))
       (normal-top-level-add-subdirs-to-load-path)))
 
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/contrib"))
+(add-to-list 'load-path (concat init-path "contrib"))
 
 (require 'init-install-packages)
 
@@ -59,7 +60,7 @@
 (setq vc-follow-symlinks t)
 
 ;; Backup file
-(setq backup-directory-alist '((".*" . "~/.emacs.d/backups")))
+(setq backup-directory-alist `((".*" . ,(concat init-path "backups"))))
 (setq auto-save-default nil)
 (setq create-lockfiles nil)
 
@@ -102,12 +103,12 @@
 
 ;; Auto insert
 (add-hook 'find-file-hooks 'auto-insert)
-(setq auto-insert-directory "~/.emacs.d/inserts")
+(setq auto-insert-directory (concat init-path "inserts"))
 
 ;; Custom location for Customize
-(setq custom-file (expand-file-name "~/.emacs.d/custom.el"))
-(if (file-exists-p (expand-file-name "~/.emacs.d/custom.el"))
-    (load-file (expand-file-name "~/.emacs.d/custom.el")))
+(setq custom-file (concat init-path "custom.el"))
+(if (file-exists-p (concat init-path "custom.el"))
+    (load-file (concat init-path "custom.el")))
 
 (add-hook 'dired-mode-hook
           (lambda()
@@ -142,5 +143,5 @@
 ;; Execute local lisp initialization.
 ;; Execute in the last step of init.el so that it doesn't disturb
 ;; other package's initialization.
-(if (file-exists-p (expand-file-name "~/.emacs.d/init-local.el"))
-    (load-file (expand-file-name "~/.emacs.d/init-local.el")))
+(if (file-exists-p (concat init-path "init-local.el"))
+    (load-file (concat init-path "init-local.el")))

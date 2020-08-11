@@ -25,10 +25,10 @@
 ;; Postfix completion
 (require 'postfix)
 (global-set-key "\C-z" 'postfix-completion)
-(add-to-list 'postfix-snippets-alist '("c" . "~/.emacs.d/postfix-snippets/c"))
-(add-to-list 'postfix-snippets-alist '("cc" . "~/.emacs.d/postfix-snippets/c++"))
-(add-to-list 'postfix-snippets-alist '("cxx" . "~/.emacs.d/postfix-snippets/c++"))
-(add-to-list 'postfix-snippets-alist '("cpp" . "~/.emacs.d/postfix-snippets/c++"))
+(add-to-list 'postfix-snippets-alist `("c" . ,(concat init-path "postfix-snippets/c")))
+(add-to-list 'postfix-snippets-alist `("cc" . ,(concat init-path "postfix-snippets/c++")))
+(add-to-list 'postfix-snippets-alist `("cxx" . ,(concat init-path "postfix-snippets/c++")))
+(add-to-list 'postfix-snippets-alist `("cpp" . ,(concat init-path "postfix-snippets/c++")))
 
 (require 'hugo-utils)
 
