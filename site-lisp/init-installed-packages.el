@@ -30,6 +30,8 @@
 (add-to-list 'postfix-snippets-alist '("cxx" . "~/.emacs.d/postfix-snippets/c++"))
 (add-to-list 'postfix-snippets-alist '("cpp" . "~/.emacs.d/postfix-snippets/c++"))
 
+(require 'hugo-utils)
+
 ;; C/C++ comment style
 (add-hook 'c-mode-common-hook
           (lambda () (c-toggle-comment-style 1)))
