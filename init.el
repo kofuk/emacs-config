@@ -20,7 +20,7 @@
 
 (add-to-list 'load-path (concat init-path "contrib"))
 
-(require 'init-install-packages)
+(load (concat init-path "ensure-packages.el"))
 
 (load-theme 'wombat t)
 
@@ -135,7 +135,7 @@
   (interactive)
   (newsticker-show-news))
 
-(require 'init-installed-packages)
+(load (concat init-path "configure-packages.el"))
 
 ;; Add code here.
 
