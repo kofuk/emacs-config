@@ -21,7 +21,6 @@
 
 (require 'init-install-packages)
 
-;; Dracula Theme
 (load-theme 'wombat t)
 
 (global-font-lock-mode 1)
@@ -37,7 +36,7 @@
 (display-battery-mode 1)
 
 (setq transient-mark-mode t)
-(setq hl-line-face 'none)
+(setq hl-line-face nil)
 (set-cursor-color "white")
 
 (setq-default indicate-empty-lines t)
