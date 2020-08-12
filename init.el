@@ -7,18 +7,8 @@
 
 (setq init-path (file-name-directory load-file-name))
 
-;; Add ~/.emacs.d/site-lisp and subdirs of ~/.emacs.d/site-lisp to load-path if it exists
-(when (file-exists-p (concat init-path "site-lisp"))
-  (let ((default-directory (concat init-path "site-lisp")))
-    (normal-top-level-add-subdirs-to-load-path))
-  (add-to-list 'load-path (concat init-path "site-lisp")))
-
-;; Add subdirs of ~/.emacs.d/site-lisp-local to load-path if it exists
-(if (file-exists-p (concat init-path "site-lisp-local"))
-    (let ((default-directory (concat init-path "site-lisp-local")))
-      (normal-top-level-add-subdirs-to-load-path)))
-
-(add-to-list 'load-path (concat init-path "contrib"))
+(dolist (path '("site-lisp" "site-lisp-local" "contrib"))
+  (add-to-list 'load-path (concat init-path path)))
 
 (load (concat init-path "ensure-packages.el"))
 

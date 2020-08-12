@@ -1,13 +1,5 @@
 ;; -*- lexical-binding: t -*-
 
-;; Postfix completion
-(require 'postfix)
-(global-set-key "\C-z" 'postfix-completion)
-(add-to-list 'postfix-snippets-alist `("c" . ,(concat init-path "postfix-snippets/c")))
-(add-to-list 'postfix-snippets-alist `("cc" . ,(concat init-path "postfix-snippets/c++")))
-(add-to-list 'postfix-snippets-alist `("cxx" . ,(concat init-path "postfix-snippets/c++")))
-(add-to-list 'postfix-snippets-alist `("cpp" . ,(concat init-path "postfix-snippets/c++")))
-
 (require 'hugo-utils)
 
 ;; C/C++ comment style
