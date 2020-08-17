@@ -89,5 +89,15 @@ for editing markdown file and insert markdown image representation."
                 (insert "lastmod: " (hugo-utils--current-timestamp)))
             (message "Unable to update lastmod; Is it Hugo post file?")))))))
 
+(defun hugo-embed-tweet ()
+  "Embed Tweet to the article."
+  (interactive)
+  (if (not (and (project-current)
+                (hugo-utils--hugo-project-p (project-root (project-current)))
+                (string= (file-name-extension buffer-file-name) "md")))
+      (message "Current buffer file is not Hugo post.")
+    (let ((tweet-id (read-string "Tweet ID: ")))
+      (insert "{{< tweet " tweet-id " >}}"))))
+
 (provide 'hugo-utils)
 ;;; hugo-utils.el ends here
