@@ -65,7 +65,8 @@
   :config
   (yas-global-mode 1))
 
-(use-package mozc
-  :config
-  (setq default-input-method "japanese-mozc")
-  (setq mozc-candidate-style 'echo-area))
+(if (package-installed-p 'mozc)
+    (use-package mozc
+      :config
+      (setq default-input-method "japanese-mozc")
+      (setq mozc-candidate-style 'echo-area)))
