@@ -1,13 +1,23 @@
 ;; -*- lexical-binding: t -*-
 
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
 (require 'hugo-utils)
 
 ;; C/C++ comment style
 (add-hook 'c-mode-common-hook
           (lambda () (c-toggle-comment-style 1)))
 
-;; Company
+(use-package clang-format
+  :ensure t)
+
+(use-package cmake-mode
+  :ensure t)
+
 (use-package company
+  :ensure t
   :config
   (global-company-mode 1)
   (setq company-transformers '(company-sort-by-backend-importance))
@@ -22,15 +32,38 @@
   (define-key company-active-map (kbd "C-h") nil)
   (define-key company-active-map (kbd "C-S-h") 'company-show-doc-buffer))
 
+(use-package company-go
+  :ensure t)
+
+(use-package csv-mode
+  :ensure t)
+
+(use-package editorconfig
+  :ensure t
+  :config
+  (editorconfig-mode 1))
+
 (use-package eglot
+  :ensure t
   :config
   (dolist (mode '(c-mode c++-mode))
     (add-to-list 'eglot-server-programs
                  `(,mode . ("clangd"))))
-  (dolist (hook '(c-mode-hook c++-mode-hook))
-    (add-hook hook 'eglot-ensure)))
+  (add-to-list 'eglot-server-programs '(rust-mode . ("rls"))))
+
+(use-package git-gutter
+  :ensure t)
+
+(use-package go-mode
+  :ensure t)
+
+(use-package highlight-indent-guides
+  :ensure t
+  :config
+  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
 
 (use-package keyfreq
+  :ensure t
   :config
   (keyfreq-mode 1)
   (keyfreq-autosave-mode 1)
@@ -44,11 +77,13 @@
       (setq satysfi-pdf-viewer-command "evince")))
 
 (use-package undo-tree
+  :ensure t
   :config
   (setq undo-tree-mode-lighter "")
   (global-undo-tree-mode t))
 
 (use-package web-mode
+  :ensure t
   :config
   (add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
@@ -57,16 +92,14 @@
   (setq web-mode-auto-close-style 2)
   (setq web-mode-enable-current-element-highlight t))
 
-(use-package highlight-indent-guides
-  :config
-  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
-
 (use-package yasnippet
+  :ensure t
   :config
   (yas-global-mode 1))
 
-(if (package-installed-p 'mozc)
+(if (executable-find "mozc_emacs_helper")
     (use-package mozc
+      :ensure t
       :config
       (setq default-input-method "japanese-mozc")
       (setq mozc-candidate-style 'echo-area)))

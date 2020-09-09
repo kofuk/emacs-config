@@ -7,10 +7,10 @@
 
 (setq init-path (file-name-directory load-file-name))
 
-(dolist (path '("site-lisp" "site-lisp-local" "contrib"))
+(dolist (path '("site-lisp" "site-lisp-local" "third_party"))
   (add-to-list 'load-path (concat init-path path)))
 
-(load (concat init-path "ensure-packages.el"))
+(load (concat init-path "configure-packages.el"))
 
 (load-theme 'wombat t)
 
@@ -126,8 +126,6 @@
 (defun news ()
   (interactive)
   (newsticker-show-news))
-
-(load (concat init-path "configure-packages.el"))
 
 ;; Add code here.
 
