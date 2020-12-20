@@ -11,7 +11,7 @@
  '(lsp-ui-peek-enable t)
  '(lsp-ui-sideline-enable t)
  '(package-selected-packages
-   '(rust-mode clang-format+ editorconfig keyfreq markdown-mode eglot csv-mode cmake-mode mozc yasnippet use-package highlight-indent-guides undo-tree htmlize web-mode git-gutter go-mode company-go))
+   '(telephone-line kaolin-themes sass-mode rust-mode clang-format+ editorconfig keyfreq markdown-mode eglot csv-mode cmake-mode mozc yasnippet use-package highlight-indent-guides undo-tree htmlize web-mode git-gutter go-mode company-go))
  '(smartparens-global-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

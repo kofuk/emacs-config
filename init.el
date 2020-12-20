@@ -6,13 +6,146 @@
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
 (setq init-path (file-name-directory load-file-name))
-
 (dolist (path '("site-lisp" "site-lisp-local" "third_party"))
   (add-to-list 'load-path (concat init-path path)))
 
-(load (concat init-path "configure-packages.el"))
+;;; Package configurations
 
-(load-theme 'wombat t)
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
+(require 'hugo-utils)
+
+;; C/C++ comment style
+(add-hook 'c-mode-common-hook
+          (lambda () (c-toggle-comment-style 1)))
+
+(use-package clang-format
+  :ensure t)
+
+(use-package cmake-mode
+  :ensure t)
+
+(use-package company
+  :ensure t
+  :config
+  (global-company-mode 1)
+  (setq company-transformers '(company-sort-by-backend-importance))
+  (setq company-idle-delay 0)
+  (setq company-minimum-prefix-length 2)
+  (setq company-selection-wrap-around t)
+  (setq completion-ignore-case t)
+  (setq company-deabbrev-downcase nil)
+  (global-set-key (kbd "C-M-i") 'company-complete)
+  (define-key company-active-map (kbd "C-n") 'company-select-next)
+  (define-key company-active-map (kbd "C-p") 'company-select-previous)
+  (define-key company-active-map (kbd "C-h") nil)
+  (define-key company-active-map (kbd "C-S-h") 'company-show-doc-buffer))
+
+(use-package company-go
+  :ensure t)
+
+(use-package csv-mode
+  :ensure t)
+
+(use-package editorconfig
+  :ensure t
+  :config
+  (editorconfig-mode 1))
+
+(use-package eglot
+  :ensure t
+  :config
+  (dolist (mode '(c-mode c++-mode))
+    (add-to-list 'eglot-server-programs
+                 `(,mode . ("clangd"))))
+  (add-to-list 'eglot-server-programs '(rust-mode . ("rls"))))
+
+(use-package git-gutter
+  :ensure t)
+
+(use-package go-mode
+  :ensure t)
+
+(use-package highlight-indent-guides
+  :ensure t
+  :config
+  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
+
+(use-package kaolin-themes
+  :ensure t
+  :config
+  (load-theme 'kaolin-dark t))
+
+(use-package sass-mode
+  :ensure t)
+
+(use-package satysfi
+  :config
+  (add-to-list 'auto-mode-alist '("\\.saty$" . satysfi-mode))
+  (add-to-list 'auto-mode-alist '("\\.satyh$" . satysfi-mode))
+  (if (equal system-type 'gnu/linux)
+      (setq satysfi-pdf-viewer-command "evince")))
+
+(use-package telephone-line
+  :ensure t
+  :config
+  (defface my-telephone-line-accent-active
+    '((t (:foreground "white" :background "gray30"))) "")
+  (defface my-telephone-line-buf-name-active
+    '((t (:foreground "white" :background "dark cyan" :weight bold))) "")
+  (setq telephone-line-height 20)
+  (setq telephone-line-faces
+        '((accent . (my-telephone-line-accent-active . telephone-line-accent-inactive))
+          (nil . (mode-line . mode-line-inactive))
+          (buf-name . (my-telephone-line-buf-name-active . telephone-line-accent-inactive))))
+  (telephone-line-defsegment my-coding-system-segment ()
+    (if buffer-file-coding-system
+        (prin1-to-string buffer-file-coding-system)
+      ""))
+  (setq telephone-line-lhs
+        '((buf-name . (telephone-line-buffer-name-segment
+                       telephone-line-buffer-modified-segment))
+          (nil . (telephone-line-simple-major-mode-segment))
+          (accent . (my-coding-system-segment))))
+  (setq telephone-line-rhs
+        '((accent . (telephone-line-vc-segment))
+          (nil . (telephone-line-misc-info-segment))
+          (accent . (telephone-line-airline-position-segment))))
+  (setq telephone-line-secondary-left-separator 'telephone-line-nil
+        telephone-line-secondary-right-separator 'telephone-line-nil)
+  (telephone-line-mode t))
+
+(use-package undo-tree
+  :ensure t
+  :config
+  (setq undo-tree-mode-lighter "")
+  (global-undo-tree-mode t))
+
+(use-package web-mode
+  :ensure t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.jsx?\\'" . web-mode))
+  (setq web-mode-markup-indent-offset 2)
+  (setq web-mode-auto-close-style 2)
+  (setq web-mode-enable-current-element-highlight t))
+
+(use-package yasnippet
+  :ensure t
+  :config
+  (yas-global-mode 1))
+
+(if (executable-find "mozc_emacs_helper")
+    (use-package mozc
+      :ensure t
+      :config
+      (setq default-input-method "japanese-mozc")
+      (setq mozc-candidate-style 'echo-area)))
+
+;;; Other configurations
 
 (global-font-lock-mode 1)
 (setq font-lock-support-mode 'jit-lock-mode)
@@ -27,7 +160,6 @@
 (display-battery-mode 1)
 
 (setq transient-mark-mode t)
-(setq hl-line-face nil)
 (set-cursor-color "white")
 
 (setq-default indicate-empty-lines t)
@@ -126,9 +258,6 @@
 (defun news ()
   (interactive)
   (newsticker-show-news))
-
-;; Add code here.
-
 
 ;; Execute local lisp initialization.
 ;; Execute in the last step of init.el so that it doesn't disturb
