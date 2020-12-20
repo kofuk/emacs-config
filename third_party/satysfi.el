@@ -29,40 +29,40 @@
 
 (defvar satysfi-command "satysfi -b")
 
-(defun satysfi-mode/insert-pair-scheme (open-string close-string)
-  (cond ((use-region-p)
-         (let ((rb (region-beginning)))
-           (let ((re (region-end)))
-             (progn
-               (goto-char rb)
-               (insert open-string)
-               (goto-char (+ (length open-string) re))
-               (insert close-string)
-               (forward-char -1)))))
-        (t
-         (progn
-           (insert (format "%s%s" open-string close-string))
-           (forward-char -1)))))
+;; (defun satysfi-mode/insert-pair-scheme (open-string close-string)
+;;   (cond ((use-region-p)
+;;          (let ((rb (region-beginning)))
+;;            (let ((re (region-end)))
+;;              (progn
+;;                (goto-char rb)
+;;                (insert open-string)
+;;                (goto-char (+ (length open-string) re))
+;;                (insert close-string)
+;;                (forward-char -1)))))
+;;         (t
+;;          (progn
+;;            (insert (format "%s%s" open-string close-string))
+;;            (forward-char -1)))))
 
-(defun satysfi-mode/insert-paren-pair ()
-  (interactive)
-  (satysfi-mode/insert-pair-scheme "(" ")"))
+;; (defun satysfi-mode/insert-paren-pair ()
+;;   (interactive)
+;;   (satysfi-mode/insert-pair-scheme "(" ")"))
 
-(defun satysfi-mode/insert-brace-pair ()
-  (interactive)
-  (satysfi-mode/insert-pair-scheme "{" "}"))
+;; (defun satysfi-mode/insert-brace-pair ()
+;;   (interactive)
+;;   (satysfi-mode/insert-pair-scheme "{" "}"))
 
-(defun satysfi-mode/insert-square-bracket-pair ()
-  (interactive)
-  (satysfi-mode/insert-pair-scheme "[" "]"))
+;; (defun satysfi-mode/insert-square-bracket-pair ()
+;;   (interactive)
+;;   (satysfi-mode/insert-pair-scheme "[" "]"))
 
-(defun satysfi-mode/insert-angle-bracket-pair ()
-  (interactive)
-  (satysfi-mode/insert-pair-scheme "<" ">"))
+;; (defun satysfi-mode/insert-angle-bracket-pair ()
+;;   (interactive)
+;;   (satysfi-mode/insert-pair-scheme "<" ">"))
 
-(defun satysfi-mode/insert-math-brace-pair ()
-  (interactive)
-  (satysfi-mode/insert-pair-scheme "${" "}"))
+;; (defun satysfi-mode/insert-math-brace-pair ()
+;;   (interactive)
+;;   (satysfi-mode/insert-pair-scheme "${" "}"))
 
 (defun satysfi-mode/open-pdf ()
   (interactive)
@@ -78,13 +78,13 @@
     (async-shell-command (format "%s %s\n" satysfi-command buffer-file-name))))
 
 (defvar satysfi-mode-map (copy-keymap global-map))
-(define-key satysfi-mode-map (kbd "(") 'satysfi-mode/insert-paren-pair)
-(define-key satysfi-mode-map (kbd "[") 'satysfi-mode/insert-square-bracket-pair)
-(define-key satysfi-mode-map (kbd "<") 'satysfi-mode/insert-angle-bracket-pair)
-(define-key satysfi-mode-map (kbd "{") 'satysfi-mode/insert-brace-pair)
-(define-key satysfi-mode-map (kbd "$") 'satysfi-mode/insert-math-brace-pair)
-(define-key satysfi-mode-map (kbd "C-c C-t") 'satysfi-mode/typeset)
-(define-key satysfi-mode-map (kbd "C-c C-f") 'satysfi-mode/open-pdf)
+;; (define-key satysfi-mode-map (kbd "(") 'satysfi-mode/insert-paren-pair)
+;; (define-key satysfi-mode-map (kbd "[") 'satysfi-mode/insert-square-bracket-pair)
+;; (define-key satysfi-mode-map (kbd "<") 'satysfi-mode/insert-angle-bracket-pair)
+;; (define-key satysfi-mode-map (kbd "{") 'satysfi-mode/insert-brace-pair)
+;; (define-key satysfi-mode-map (kbd "$") 'satysfi-mode/insert-math-brace-pair)
+;; (define-key satysfi-mode-map (kbd "C-c C-t") 'satysfi-mode/typeset)
+;; (define-key satysfi-mode-map (kbd "C-c C-f") 'satysfi-mode/open-pdf)
 
 (define-generic-mode satysfi-mode
   '(?%)
