@@ -104,6 +104,8 @@
     (if buffer-file-coding-system
         (prin1-to-string buffer-file-coding-system)
       ""))
+  (telephone-line-defsegment my-input-method-segment ()
+    (if current-input-method "あ" "A"))
   (setq telephone-line-lhs
         '((buf-name . (telephone-line-buffer-name-segment
                        telephone-line-buffer-modified-segment))
@@ -112,7 +114,8 @@
   (setq telephone-line-rhs
         '((accent . (telephone-line-vc-segment))
           (nil . (telephone-line-misc-info-segment))
-          (accent . (telephone-line-airline-position-segment))))
+          (accent . (telephone-line-airline-position-segment))
+          (nil . (my-input-method-segment))))
   (setq telephone-line-secondary-left-separator 'telephone-line-nil
         telephone-line-secondary-right-separator 'telephone-line-nil)
   (telephone-line-mode t))
