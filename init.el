@@ -83,8 +83,8 @@
 
 (use-package satysfi
   :config
-  (add-to-list 'auto-mode-alist '("\\.saty$" . satysfi-mode))
-  (add-to-list 'auto-mode-alist '("\\.satyh$" . satysfi-mode))
+  (add-to-list 'auto-mode-alist '("\\.saty\\'" . satysfi-mode))
+  (add-to-list 'auto-mode-alist '("\\.satyh\\'" . satysfi-mode))
   (if (equal system-type 'gnu/linux)
       (setq satysfi-pdf-viewer-command "evince")))
 
@@ -167,6 +167,13 @@
 
 (setq-default indicate-empty-lines t)
 
+;; GDB
+
+(setq gdb-many-windows t)
+(setq gdb-use-separate-io-buffer t)
+(add-hook 'gdb-mode-hook '(lambda () (gud-tooltip-mode t)))
+(setq gud-tooltip-echo-area t)
+
 ;; Show line number in the left
 (if (version<= "26.0.50" emacs-version)
     (global-display-line-numbers-mode)
@@ -223,9 +230,6 @@
           (add-hook hook '(lambda () (flyspell-mode 1))))
         '(text-mode-hook)))
 
-;; Avoid messing up gnome-terminal when chars with ambiguous width are displayed.
-(set-language-environment "English")
-
 ;; Auto insert
 (add-hook 'find-file-hooks 'auto-insert)
 (setq auto-insert-directory (concat init-path "inserts"))
@@ -236,8 +240,13 @@
     (load-file (concat init-path "custom.el")))
 
 (add-hook 'dired-mode-hook
-          (lambda()
+          (lambda ()
             (dired-hide-details-mode)))
+
+;; Disable auto insertion of new line after `;'.
+(add-hook 'verilog-mode-hook
+          (lambda ()
+            (define-key verilog-mode-map ";" nil)))
 
 ;; Settings to use GUI comfortably.
 (tool-bar-mode 0)
