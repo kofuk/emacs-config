@@ -46,6 +46,9 @@
 (use-package company-go
   :ensure t)
 
+(use-package csharp-mode
+  :ensure t)
+
 (use-package csv-mode
   :ensure t)
 
