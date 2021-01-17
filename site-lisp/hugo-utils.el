@@ -32,24 +32,22 @@
 (defun hugo-utils--get-post-name (post-path)
   (file-name-sans-extension (file-name-nondirectory post-path)))
 
-(defun hugo-insert-image ()
+(defun hugo-insert-image (image-file new-name alt-string move)
   "Ask for image path, and copy the image to hugo static file directory
 for editing markdown file and insert markdown image representation."
-  (interactive)
+  (interactive "fImage file path: \nsInsert as: \nsAlternative string: \nP")
   (if (not (and (project-current)
                 (hugo-utils--hugo-project-p (project-root (project-current)))))
       (message "Current editing file is not part of Hugo based project.")
-    (let* ((image-file (read-file-name "Image file path: "))
-           (new-name (read-string "Insert as: " (file-name-nondirectory image-file)))
-           (post-name (hugo-utils--get-post-name buffer-file-name))
+    (let* ((post-name (hugo-utils--get-post-name buffer-file-name))
            (project-root-dir (project-root (project-current)))
            (post-image-dir (concat project-root-dir "static/images/" post-name)))
       (make-directory post-image-dir t)
-      (copy-file image-file (concat post-image-dir "/" new-name) t)
+      (if move
+          (rename-file image-file (concat post-image-dir "/" new-name))
+        (copy-file image-file (concat post-image-dir "/" new-name) t))
       (save-excursion
-          (insert "!["
-                  (read-string "Image alternative string: ")
-                  "](/images/" post-name "/" new-name ")")))))
+        (insert (format "![%s](/images/%s/%s)" alt-string post-name new-name))))))
 
 (defun hugo-utils--current-timestamp ()
   (concat (format-time-string "%FT%T")
@@ -89,15 +87,23 @@ for editing markdown file and insert markdown image representation."
                 (insert "lastmod: " (hugo-utils--current-timestamp)))
             (message "Unable to update lastmod; Is it Hugo post file?")))))))
 
-(defun hugo-embed-tweet ()
-  "Embed Tweet to the article."
-  (interactive)
+(defun hugo-utils--insert-with-id-at-point (shortcode id)
+  "Insert specified SHORTCODE with argument ID"
   (if (not (and (project-current)
                 (hugo-utils--hugo-project-p (project-root (project-current)))
                 (string= (file-name-extension buffer-file-name) "md")))
       (message "Current buffer file is not Hugo post.")
-    (let ((tweet-id (read-string "Tweet ID: ")))
-      (insert "{{< tweet " tweet-id " >}}"))))
+    (insert (format "{{< %s %s >}}" shortcode id))))
+
+(defun hugo-embed-tweet (tweet-id)
+  "Insert Tweet to the article."
+  (interactive "sTweed ID: ")
+  (hugo-utils--insert-with-id-at-point "tweet" tweet-id))
+
+(defun hugo-embed-youtube (video-id)
+  "Insert YouTube video to the article."
+  (interactive "sVideo ID: ")
+  (hugo-utils--insert-with-id-at-point "youtube" video-id))
 
 (provide 'hugo-utils)
 ;;; hugo-utils.el ends here
