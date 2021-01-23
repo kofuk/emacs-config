@@ -1,3 +1,7 @@
+;; If it is Windows, change directory to user's home directory.
+(if (or (equal system-type 'windows-nt) (equal system-type 'cygwin))
+    (cd (getenv "USERPROFILE")))
+
 ;; For Emacs 27.1+, we don't have to call package-initialize implicitly,
 ;; so call it only if running on older Emacs.
 (if (version< emacs-version "27.1")
@@ -38,10 +42,10 @@
   (setq completion-ignore-case t)
   (setq company-deabbrev-downcase nil)
   (global-set-key (kbd "C-M-i") 'company-complete)
-  (define-key company-active-map (kbd "C-n") 'company-select-next)
-  (define-key company-active-map (kbd "C-p") 'company-select-previous)
+  (define-key company-active-map (kbd "C-n") #'company-select-next)
+  (define-key company-active-map (kbd "C-p") #'company-select-previous)
   (define-key company-active-map (kbd "C-h") nil)
-  (define-key company-active-map (kbd "C-S-h") 'company-show-doc-buffer))
+  (define-key company-active-map (kbd "C-S-h") #'company-show-doc-buffer))
 
 (use-package company-go
   :ensure t)
@@ -74,7 +78,7 @@
 (use-package highlight-indent-guides
   :ensure t
   :config
-  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
+  (add-hook 'prog-mode-hook #'highlight-indent-guides-mode))
 
 (use-package kaolin-themes
   :ensure t
@@ -139,11 +143,6 @@
   (setq web-mode-auto-close-style 2)
   (setq web-mode-enable-current-element-highlight t))
 
-(use-package yasnippet
-  :ensure t
-  :config
-  (yas-global-mode 1))
-
 (if (executable-find "mozc_emacs_helper")
     (use-package mozc
       :ensure t
@@ -207,8 +206,8 @@
 (setq read-file-name-completion-ignore-case t)
 
 ;; Make easy to split window
-(global-set-key (kbd "C-c -") 'split-window-vertically)
-(global-set-key (kbd "C-c |") 'split-window-horizontally)
+(global-set-key (kbd "C-c -") #'split-window-vertically)
+(global-set-key (kbd "C-c |") #'split-window-horizontally)
 
 ;; Disable annoying key
 (global-set-key "\C-v" nil)
@@ -218,7 +217,7 @@
   (interactive)
   (revert-buffer 1 1 1))
 
-(global-set-key (kbd "<f5>") 'revert-buffer-noconfirm)
+(global-set-key (kbd "<f5>") #'revert-buffer-noconfirm)
 
 ;; Make Emacs to put '\n' at the end of file
 (setq require-final-newline t)
@@ -230,11 +229,11 @@
   ;; flyspell-prog-mode disturb completion from working properly thus I don't
   ;; enable it if I edit source code.
   (mapc (lambda (hook)
-          (add-hook hook '(lambda () (flyspell-mode 1))))
+          (add-hook hook (lambda () (flyspell-mode 1))))
         '(text-mode-hook)))
 
 ;; Auto insert
-(add-hook 'find-file-hooks 'auto-insert)
+(add-hook 'find-file-hooks #'auto-insert)
 (setq auto-insert-directory (concat init-path "inserts"))
 
 ;; Custom location for Customize
@@ -257,22 +256,39 @@
                             (height . 35)
                             (cursor-type . bar)))
 
-;; Use Noto font for kanji and half-width katakana
-(when window-system
-  (add-hook 'after-make-frame-functions
-            (lambda (frame)
-              (set-fontset-font t 'unicode "-GOOG-Noto Sans CJK JP-normal-normal-normal-*-*-*-*-*-*-0-iso10646-1")))
-  (set-fontset-font t 'unicode "-GOOG-Noto Sans CJK JP-normal-normal-normal-*-*-*-*-*-*-0-iso10646-1"))
+;; Use Noto font
+(set-fontset-font t 'unicode "Noto Sans CJK JP")
+(set-fontset-font t 'symbol "Noto Color Emoji")
 
 (setq frame-title-format "%b - Emacs")
 
 ;; Overwrite selected area
 (delete-selection-mode 1)
 
+(windmove-default-keybindings 'meta)
+
 (load "feeds")
 (defun news ()
   (interactive)
   (newsticker-show-news))
+
+(defmacro :? (obj &rest body)
+  "Evaluate BODY if OBJ is nil."
+  `(let ((arg ,obj))
+     (if arg arg ,@body)))
+
+(defun source-line ()
+  "Put line number string for current point or region to kill-ring in
+filename#L1-L2 form."
+  (interactive)
+  (let ((file (file-name-nondirectory (:? (buffer-file-name) ""))))
+    (kill-new
+     (if (use-region-p)
+         (let ((first (line-number-at-pos (region-beginning)))
+               (last (line-number-at-pos (region-end))))
+           (format "%s#L%d-L%d" file first last))
+       (format "%s#L%d" file (line-number-at-pos (point))))))
+  (deactivate-mark))
 
 ;; Execute local lisp initialization.
 ;; Execute in the last step of init.el so that it doesn't disturb
