@@ -170,11 +170,18 @@
 (setq-default indicate-empty-lines t)
 
 ;; GDB
-
 (setq gdb-many-windows t)
 (setq gdb-use-separate-io-buffer t)
 (add-hook 'gdb-mode-hook '(lambda () (gud-tooltip-mode t)))
 (setq gud-tooltip-echo-area t)
+
+;; Rectangle region
+;;  I don't have to enable cua-mode only to ues cus's rectangle region functionality,
+;;  but it's required to edit keymaps for rectangle region
+(cua-mode 1)
+(setq cua-enable-cua-keys nil)
+(global-set-key (kbd "C-x SPC") #'cua-set-rectangle-mark)
+(define-key cua--rectangle-keymap (kbd "C-x C-x") #'cua-rotate-rectangle)
 
 ;; Show line number in the left
 (if (version<= "26.0.50" emacs-version)
@@ -204,10 +211,6 @@
 (global-whitespace-mode 1)
 
 (setq read-file-name-completion-ignore-case t)
-
-;; Make easy to split window
-(global-set-key (kbd "C-c -") #'split-window-vertically)
-(global-set-key (kbd "C-c |") #'split-window-horizontally)
 
 ;; Disable annoying key
 (global-set-key "\C-v" nil)
@@ -252,13 +255,15 @@
 
 ;; Settings to use GUI comfortably.
 (tool-bar-mode 0)
+
 (setq default-frame-alist '((width . 100)
                             (height . 35)
+                            (font . "Source Code Pro-8")
                             (cursor-type . bar)))
 
 ;; Use Noto font
-(set-fontset-font t 'unicode "Noto Sans CJK JP")
-(set-fontset-font t 'symbol "Noto Color Emoji")
+(set-fontset-font t 'unicode "Noto Sans CJK JP-8")
+(set-fontset-font t 'symbol "Noto Color Emoji-8")
 
 (setq frame-title-format "%b - Emacs")
 
@@ -275,7 +280,9 @@
 (defmacro :? (obj &rest body)
   "Evaluate BODY if OBJ is nil."
   `(let ((arg ,obj))
-     (if arg arg ,@body)))
+     (if arg
+         arg
+       ,@body)))
 
 (defun source-line ()
   "Put line number string for current point or region to kill-ring in
