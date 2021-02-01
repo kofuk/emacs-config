@@ -258,12 +258,11 @@
 
 (setq default-frame-alist '((width . 100)
                             (height . 35)
-                            (font . "Source Code Pro-8")
                             (cursor-type . bar)))
 
 ;; Use Noto font
-(set-fontset-font t 'unicode "Noto Sans CJK JP-8")
-(set-fontset-font t 'symbol "Noto Color Emoji-8")
+(set-fontset-font t 'unicode "Noto Sans CJK JP")
+(set-fontset-font t 'symbol "Noto Color Emoji")
 
 (setq frame-title-format "%b - Emacs")
 

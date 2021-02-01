@@ -1,6 +1,6 @@
 ;;; hugo-utils.el --- Utilities for Hugo             -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2020  Koki Fukuda
+;; Copyright (C) 2020-2021  Koki Fukuda
 
 ;; Author: Koki Fukuda <ko.fu.dev@gmail.com>
 ;; Keywords: convenience
