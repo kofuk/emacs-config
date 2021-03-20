@@ -69,7 +69,7 @@ for editing markdown file and insert markdown image representation."
       (save-restriction
         (widen)
         (goto-char (point-min))
-        (next-line)
+        (forward-line)
         (search-forward "---")
         ;; Avoid editing non-property line.
         (narrow-to-region (point-min) (point))
@@ -83,7 +83,7 @@ for editing markdown file and insert markdown image representation."
               (progn
                 (end-of-line)
                 (open-line 1)
-                (next-line)
+                (forward-line)
                 (insert "lastmod: " (hugo-utils--current-timestamp)))
             (message "Unable to update lastmod; Is it Hugo post file?")))))))
 

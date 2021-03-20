@@ -9,9 +9,8 @@
 
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
-(setq init-path (file-name-directory load-file-name))
 (dolist (path '("site-lisp" "site-lisp-local" "third_party"))
-  (add-to-list 'load-path (concat init-path path)))
+  (add-to-list 'load-path (locate-user-emacs-file path)))
 
 ;;; Package configurations
 
@@ -201,7 +200,7 @@
 (setq vc-follow-symlinks t)
 
 ;; Backup file
-(setq backup-directory-alist `((".*" . ,(concat init-path "backups"))))
+(setq backup-directory-alist `((".*" . ,(locate-user-emacs-file "backups"))))
 (setq auto-save-default nil)
 (setq create-lockfiles nil)
 
@@ -236,13 +235,18 @@
         '(text-mode-hook)))
 
 ;; Auto insert
-(add-hook 'find-file-hooks #'auto-insert)
-(setq auto-insert-directory (concat init-path "inserts"))
+(auto-insert-mode 1)
+(setq auto-insert-directory (locate-user-emacs-file "inserts"))
+(add-to-list 'auto-insert-alist
+             '(("CMakeLists\\.txt\\'" . "CMake build configuration")
+               nil "cmake_minimum_required(VERSION 3.15)\n"
+               "project(" (read-string "Project: ") & ")\n" | -45
+               _))
 
 ;; Custom location for Customize
-(setq custom-file (concat init-path "custom.el"))
-(if (file-exists-p (concat init-path "custom.el"))
-    (load-file (concat init-path "custom.el")))
+(setq custom-file (locate-user-emacs-file "custom.el"))
+(if (file-exists-p (locate-user-emacs-file "custom.el"))
+    (load-file (locate-user-emacs-file "custom.el")))
 
 (add-hook 'dired-mode-hook
           (lambda ()
@@ -299,5 +303,5 @@ filename#L1-L2 form."
 ;; Execute local lisp initialization.
 ;; Execute in the last step of init.el so that it doesn't disturb
 ;; other package's initialization.
-(if (file-exists-p (concat init-path "init-local.el"))
-    (load-file (concat init-path "init-local.el")))
+(if (file-exists-p (locate-user-emacs-file "init-local.el"))
+    (load-file (locate-user-emacs-file "init-local.el")))
