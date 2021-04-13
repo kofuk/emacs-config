@@ -18,10 +18,6 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
-(autoload 'hugo-update-lastmod "hugo-utils")
-(autoload 'hugo-embed-tweet "hugo-utils")
-(autoload 'hugo-embed-youtube "hugo-utils")
-
 ;; C/C++ comment style
 (add-hook 'c-mode-common-hook
           (lambda () (c-toggle-comment-style 1)))
@@ -87,7 +83,9 @@
   (load-theme 'kaolin-dark t))
 
 (use-package markdown-mode
-  :ensure t)
+  :ensure t
+  :hook
+  (markdown-mode . (lambda () (require 'hugo-utils))))
 
 (use-package sass-mode
   :ensure t)
