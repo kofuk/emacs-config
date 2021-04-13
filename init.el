@@ -18,7 +18,9 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
-(require 'hugo-utils)
+(autoload 'hugo-update-lastmod "hugo-utils")
+(autoload 'hugo-embed-tweet "hugo-utils")
+(autoload 'hugo-embed-youtube "hugo-utils")
 
 ;; C/C++ comment style
 (add-hook 'c-mode-common-hook
@@ -84,6 +86,9 @@
   :config
   (load-theme 'kaolin-dark t))
 
+(use-package markdown-mode
+  :ensure t)
+
 (use-package sass-mode
   :ensure t)
 
@@ -93,6 +98,9 @@
   (add-to-list 'auto-mode-alist '("\\.satyh\\'" . satysfi-mode))
   (if (equal system-type 'gnu/linux)
       (setq satysfi-pdf-viewer-command "evince")))
+
+(use-package rust-mode
+  :ensure t)
 
 (use-package telephone-line
   :ensure t
@@ -223,16 +231,6 @@
 
 ;; Make Emacs to put '\n' at the end of file
 (setq require-final-newline t)
-
-;; Spell check
-(when (executable-find "aspell")
-  (setq-default ispell-program-name "aspell")
-  ;; Enable flyspell mode automatically only if I edit plain text file.
-  ;; flyspell-prog-mode disturb completion from working properly thus I don't
-  ;; enable it if I edit source code.
-  (mapc (lambda (hook)
-          (add-hook hook (lambda () (flyspell-mode 1))))
-        '(text-mode-hook)))
 
 ;; Auto insert
 (auto-insert-mode 1)
