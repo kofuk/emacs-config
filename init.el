@@ -1,11 +1,9 @@
-;; If it is Windows, change directory to user's home directory.
-(if (or (equal system-type 'windows-nt) (equal system-type 'cygwin))
-    (cd (getenv "USERPROFILE")))
-
 ;; For Emacs 27.1+, we don't have to call package-initialize implicitly,
 ;; so call it only if running on older Emacs.
 (if (version< emacs-version "27.1")
-    (package-initialize))
+    (progn
+      (package-initialize)
+      (load (locate-user-emacs-file "early-init.el"))))
 
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
@@ -196,9 +194,6 @@
 ;; Start up screen
 (setq inhibit-startup-screen t)
 
-;; Disable menu bar since it is not needed.
-(menu-bar-mode 0)
-
 ;; Save cursor position
 (if (fboundp 'save-place-mode) (save-place-mode 1) (setq-default save-place t))
 
@@ -252,13 +247,6 @@
 (add-hook 'verilog-mode-hook
           (lambda ()
             (define-key verilog-mode-map ";" nil)))
-
-;; Settings to use GUI comfortably.
-(tool-bar-mode 0)
-
-(setq default-frame-alist '((width . 100)
-                            (height . 35)
-                            (cursor-type . bar)))
 
 ;; Use Noto font
 (set-fontset-font t 'unicode "Noto Sans CJK JP")
