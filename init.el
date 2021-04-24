@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t -*-
+
 ;; For Emacs 27.1+, we don't have to call package-initialize implicitly,
 ;; so call it only if running on older Emacs.
 (if (version< emacs-version "27.1")
@@ -290,3 +292,6 @@ filename#L1-L2 form."
 ;; other package's initialization.
 (if (file-exists-p (locate-user-emacs-file "init-local.el"))
     (load-file (locate-user-emacs-file "init-local.el")))
+
+(setq file-name-handler-alist my-saved-file-name-handler-alist)
+(setq gc-cons-threshold 16777216)
