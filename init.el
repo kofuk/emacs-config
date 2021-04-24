@@ -62,7 +62,8 @@
   (dolist (mode '(c-mode c++-mode))
     (add-to-list 'eglot-server-programs
                  `(,mode . ("clangd"))))
-  (add-to-list 'eglot-server-programs '(rust-mode . ("rls"))))
+  (if (executable-find "rust-analyzer")
+      (add-to-list 'eglot-server-programs '(rust-mode . ("rust-analyzer")))))
 
 (use-package git-gutter
   :ensure t)
