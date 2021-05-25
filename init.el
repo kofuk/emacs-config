@@ -83,6 +83,9 @@
   :config
   (load-theme 'kaolin-dark t))
 
+(use-package lua-mode
+  :ensure t)
+
 (use-package markdown-mode
   :ensure t
   :hook
