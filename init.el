@@ -18,6 +18,11 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
+(use-package kaolin-themes
+  :ensure t
+  :config
+  (load-theme 'kaolin-dark t))
+
 ;; C/C++ comment style
 (add-hook 'c-mode-common-hook
           (lambda () (c-toggle-comment-style 1)))
@@ -77,11 +82,6 @@
   :ensure t
   :config
   (add-hook 'prog-mode-hook #'highlight-indent-guides-mode))
-
-(use-package kaolin-themes
-  :ensure t
-  :config
-  (load-theme 'kaolin-dark t))
 
 (use-package lua-mode
   :ensure t)
