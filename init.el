@@ -27,7 +27,7 @@
 (add-hook 'c-mode-common-hook
           (lambda () (c-toggle-comment-style 1)))
 
-(use-package clang-format
+(use-package clang-format+
   :ensure t)
 
 (use-package cmake-mode
@@ -90,6 +90,9 @@
   :ensure t
   :hook
   (markdown-mode . (lambda () (require 'hugo-utils))))
+
+(use-package meson-mode
+  :ensure t)
 
 (use-package sass-mode
   :ensure t)
