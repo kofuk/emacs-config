@@ -1,3 +1,6 @@
+(if (eq system-type 'windows-nt)
+    (cd "~"))
+
 (defconst my-saved-file-name-handler-alist file-name-handler-alist)
 (setq file-name-handler-alist nil)
 (setq gc-cons-threshold most-positive-fixnum)
