@@ -41,7 +41,6 @@
   (setq company-idle-delay 0)
   (setq company-minimum-prefix-length 2)
   (setq company-selection-wrap-around t)
-  (setq completion-ignore-case t)
   (setq company-deabbrev-downcase nil)
   (global-set-key (kbd "C-M-i") 'company-complete)
   (define-key company-active-map (kbd "C-n") #'company-select-next)
@@ -176,7 +175,6 @@
 (size-indication-mode 1)
 (display-battery-mode 1)
 
-(setq transient-mark-mode t)
 (set-cursor-color "white")
 
 (setq-default indicate-empty-lines t)
@@ -220,9 +218,15 @@
 (global-whitespace-mode 1)
 
 (setq read-file-name-completion-ignore-case t)
+(setq completion-ignore-case t)
+(setq history-delete-duplicates t)
 
 ;; Disable annoying key
 (global-set-key "\C-v" nil)
+
+;; Scroll the buffer line-by-line
+(global-set-key "\M-n" #'scroll-up-line)
+(global-set-key "\M-p" #'scroll-down-line)
 
 (defun revert-buffer-noconfirm ()
   "Reverts buffer data from assciated file, without any prompt"
