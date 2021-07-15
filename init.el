@@ -163,7 +163,6 @@
 
 ;;; Other configurations
 
-(global-font-lock-mode 1)
 (setq font-lock-support-mode 'jit-lock-mode)
 (setq font-lock-maximum-decornation t)
 (show-paren-mode t)
@@ -198,6 +197,11 @@
     (global-display-line-numbers-mode)
   (global-linum-mode t))
 
+;; Recognize words in camelCaseString.
+(global-subword-mode t)
+
+(which-function-mode t)
+
 ;; Start up screen
 (setq inhibit-startup-screen t)
 
@@ -220,6 +224,8 @@
 (setq read-file-name-completion-ignore-case t)
 (setq completion-ignore-case t)
 (setq history-delete-duplicates t)
+
+(setq initial-scratch-message nil)
 
 ;; Disable annoying key
 (global-set-key "\C-v" nil)
