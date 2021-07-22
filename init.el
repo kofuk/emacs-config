@@ -18,10 +18,19 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
-(use-package kaolin-themes
+(use-package modus-themes
   :ensure t
+  :init
+  (setq
+   modus-themes-italic-constructs t
+   modus-themes-bold-constructs t
+   modus-themes-fringes 'intense
+   modus-themes-paren-match '(bold)
+   modus-themes-region '(bg-only)
+   modus-themes-mode-line '(accented borderless))
+  (modus-themes-load-themes)
   :config
-  (load-theme 'kaolin-dark t))
+  (modus-themes-load-vivendi))
 
 ;; C/C++ comment style
 (add-hook 'c-mode-common-hook
@@ -93,6 +102,12 @@
 (use-package meson-mode
   :ensure t)
 
+(use-package moody
+  :ensure t
+  :config
+ (moody-replace-mode-line-buffer-identification)
+  (moody-replace-vc-mode))
+
 (use-package sass-mode
   :ensure t)
 
@@ -105,38 +120,6 @@
 
 (use-package rust-mode
   :ensure t)
-
-(use-package telephone-line
-  :ensure t
-  :config
-  (defface my-telephone-line-accent-active
-    '((t (:foreground "white" :background "gray30"))) "")
-  (defface my-telephone-line-buf-name-active
-    '((t (:foreground "white" :background "dark cyan" :weight bold))) "")
-  (setq telephone-line-height 20)
-  (setq telephone-line-faces
-        '((accent . (my-telephone-line-accent-active . telephone-line-accent-inactive))
-          (nil . (mode-line . mode-line-inactive))
-          (buf-name . (my-telephone-line-buf-name-active . telephone-line-accent-inactive))))
-  (telephone-line-defsegment my-coding-system-segment ()
-    (if buffer-file-coding-system
-        (prin1-to-string buffer-file-coding-system)
-      ""))
-  (telephone-line-defsegment my-input-method-segment ()
-    (if current-input-method "あ" "A"))
-  (setq telephone-line-lhs
-        '((buf-name . (telephone-line-buffer-name-segment
-                       telephone-line-buffer-modified-segment))
-          (nil . (telephone-line-simple-major-mode-segment))
-          (accent . (my-coding-system-segment))))
-  (setq telephone-line-rhs
-        '((accent . (telephone-line-vc-segment))
-          (nil . (telephone-line-misc-info-segment))
-          (accent . (telephone-line-airline-position-segment))
-          (nil . (my-input-method-segment))))
-  (setq telephone-line-secondary-left-separator 'telephone-line-nil
-        telephone-line-secondary-right-separator 'telephone-line-nil)
-  (telephone-line-mode t))
 
 (use-package undo-tree
   :ensure t
@@ -308,6 +291,9 @@ filename#L1-L2 form."
 ;; other package's initialization.
 (if (file-exists-p (locate-user-emacs-file "init-local.el"))
     (load-file (locate-user-emacs-file "init-local.el")))
+
+;; "Clear the clutter."
+(setq minor-mode-alist nil)
 
 (setq file-name-handler-alist my-saved-file-name-handler-alist)
 (setq gc-cons-threshold 16777216)
