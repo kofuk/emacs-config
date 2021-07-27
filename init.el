@@ -236,6 +236,9 @@
                "project(" (read-string "Project: ") & ")\n" | -45
                _))
 
+;; Major mode
+(add-to-list 'auto-mode-alist '("PKGBUILD\\'" . shell-script-mode))
+
 ;; Custom location for Customize
 (setq custom-file (locate-user-emacs-file "custom.el"))
 (if (file-exists-p (locate-user-emacs-file "custom.el"))
