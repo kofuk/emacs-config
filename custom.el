@@ -11,7 +11,7 @@
  '(lsp-ui-peek-enable t)
  '(lsp-ui-sideline-enable t)
  '(package-selected-packages
-   '(moody modus-themes meson-mode lua-mode csharp-mode sass-mode rust-mode clang-format+ editorconfig markdown-mode eglot csv-mode cmake-mode mozc use-package highlight-indent-guides undo-tree htmlize web-mode git-gutter go-mode company-go))
+   '(yaml-mode moody modus-themes meson-mode lua-mode csharp-mode sass-mode rust-mode clang-format+ editorconfig markdown-mode eglot csv-mode cmake-mode mozc use-package highlight-indent-guides undo-tree htmlize web-mode git-gutter go-mode company-go))
  '(pos-tip-background-color "#222225")
  '(pos-tip-foreground-color "#c8c8d0")
  '(smartparens-global-mode t))

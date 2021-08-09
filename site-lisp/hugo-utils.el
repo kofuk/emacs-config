@@ -29,8 +29,15 @@
        (file-exists-p (concat project-path "archetypes"))
        (file-exists-p (concat project-path "content"))))
 
-(defun hugo-utils--get-post-name (post-path)
-  (file-name-sans-extension (file-name-nondirectory post-path)))
+(defun hugo-utils--make-sure-post-is-dir (post-path)
+  (unless (string= (file-name-nondirectory post-path) "index.md")
+    (let ((new-dir (file-name-sans-extension  post-path))
+          (cur-point (point)))
+      (make-directory new-dir)
+      (save-buffer)
+      (rename-file post-path (concat new-dir "/index.md"))
+      (find-alternate-file (concat new-dir "/index.md"))
+      (goto-char cur-point))))
 
 (defun hugo-insert-image (image-file new-name alt-string move)
   "Ask for image path, and copy the image to hugo static file directory
@@ -39,15 +46,12 @@ for editing markdown file and insert markdown image representation."
   (if (not (and (project-current)
                 (hugo-utils--hugo-project-p (project-root (project-current)))))
       (message "Current editing file is not part of Hugo based project.")
-    (let* ((post-name (hugo-utils--get-post-name buffer-file-name))
-           (project-root-dir (project-root (project-current)))
-           (post-image-dir (concat project-root-dir "static/images/" post-name)))
-      (make-directory post-image-dir t)
+    (hugo-utils--make-sure-post-is-dir buffer-file-name)
+    (let ((post-image-dir (file-name-directory buffer-file-name)))
       (if move
           (rename-file image-file (concat post-image-dir "/" new-name))
         (copy-file image-file (concat post-image-dir "/" new-name) t))
-      (save-excursion
-        (insert (format "![%s](/images/%s/%s)" alt-string post-name new-name))))))
+      (insert (format "![%s](%s)" alt-string new-name)))))
 
 (defun hugo-utils--current-timestamp ()
   (concat (format-time-string "%FT%T")
