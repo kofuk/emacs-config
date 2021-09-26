@@ -1,10 +1,9 @@
 ;;; -*- lexical-binding: t -*-
 
-;; For Emacs 27.1+, we don't have to call package-initialize implicitly,
-;; so call it only if running on older Emacs.
+(package-initialize)
+
 (if (version< emacs-version "27.1")
     (progn
-      (package-initialize)
       (load (locate-user-emacs-file "early-init.el"))))
 
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
@@ -132,7 +131,7 @@
   :config
   (add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.jsx?\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
   (setq web-mode-markup-indent-offset 2)
   (setq web-mode-auto-close-style 2)
   (setq web-mode-enable-current-element-highlight t))
@@ -155,7 +154,12 @@
 (line-number-mode 1)
 (column-number-mode 1)
 (size-indication-mode 1)
-(display-battery-mode 1)
+;; Display battery status only on laptop.
+(if (file-exists-p "/sys/class/dmi/id/chassis_type")
+    (with-temp-buffer
+      (insert-file-contents "/sys/class/dmi/id/chassis_type")
+      (if (not (string= (buffer-string) "3\n"))
+          (display-battery-mode 1))))
 
 (set-cursor-color "white")
 
