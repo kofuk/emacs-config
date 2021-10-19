@@ -62,7 +62,7 @@
 (use-package csharp-mode
   :ensure t)
 
-(use-package csv-mode
+(use-package dockerfile-mode
   :ensure t)
 
 (use-package editorconfig
@@ -186,6 +186,8 @@
 
 ;; Recognize words in camelCaseString.
 (global-subword-mode t)
+
+(global-so-long-mode t)
 
 (which-function-mode t)
 
