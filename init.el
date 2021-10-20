@@ -216,6 +216,9 @@
 
 (setq initial-scratch-message nil)
 
+;; Don't warn file size up to 100MB.
+(setq large-file-warning-threshold  100000000)
+
 ;; Disable annoying key
 (global-set-key "\C-v" nil)
 
