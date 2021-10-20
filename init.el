@@ -126,6 +126,10 @@
   (setq undo-tree-mode-lighter "")
   (global-undo-tree-mode t))
 
+(if (equal system-type 'gnu/linux)
+    (use-package vterm
+      :ensure t))
+
 (use-package web-mode
   :ensure t
   :config
