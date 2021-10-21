@@ -391,10 +391,5 @@ filename#L1-L2 form."
 (if (file-exists-p (locate-user-emacs-file "init-local.el"))
     (load-file (locate-user-emacs-file "init-local.el")))
 
-;; "Clear the clutter."
-(use-package emacs
-  :config
-  (setq minor-mode-alist nil))
-
 (setq file-name-handler-alist my-saved-file-name-handler-alist)
 (setq gc-cons-threshold 16777216)
