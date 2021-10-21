@@ -82,16 +82,9 @@
   :defer t)
 
 (use-package cua-base
-  :config
-  ;; Rectangle region
-  ;;  I don't have to enable cua-mode only to ues cus's rectangle region functionality,
-  ;;  but it's required to edit keymaps for rectangle region
-  (cua-mode 1)
-  (define-key cua--rectangle-keymap (kbd "C-x C-x") #'cua-rotate-rectangle)
+  :defer t
   :bind
-  ("C-x SPC" . #'cua-set-rectangle-mark)
-  :custom
-  (cua-enable-cua-keys nil))
+  ("C-x SPC" . #'cua-rectangle-mark-mode))
 
 (use-package cus-edit
   :config
