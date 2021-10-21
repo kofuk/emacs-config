@@ -46,7 +46,10 @@
   :defer t
   :hook
   ;; comment style
-  (c-mode-common . (lambda () (c-toggle-comment-style -1))))
+  (c-mode-common . (lambda () (c-toggle-comment-style -1)))
+  :custom
+  (c-basic-offset 4)
+  (c-default-style '((java-mode . "java") (awk-mode . "awk") (other . "bsd"))))
 
 (use-package clang-format+
   :defer t
@@ -184,7 +187,9 @@
 
 (use-package git-gutter
   :defer t
-  :ensure t)
+  :ensure t
+  :custom
+  (global-git-gutter-mode t))
 
 (use-package go-mode
   :defer t
@@ -195,6 +200,11 @@
   :defer t
   :hook
   (prog-mode . (lambda () (highlight-indent-guides-mode t))))
+
+(use-package hl-line-mode
+  :defer t
+  :custom
+  (global-hl-line-mode t))
 
 ;; Backward compatibility
 (use-package linum
@@ -300,9 +310,9 @@
 
 (use-package verilog-mode
   :defer t
-  :bind-keymap
+  :hook
   ;; Disable auto insertion of new line after `;'.
-  (";" . nil))
+  (verilog-mode . (lambda () (define-key verilog-mode-map ";" nil))))
 
 (use-package vterm
   :if (equal system-type 'gnu/linux)
