@@ -152,9 +152,11 @@
   ;; Scroll the buffer
   :bind
   ;; Disable annoying key
-  ("\C-v" . nil)
-  ("\M-n" . #'scroll-up-line)
-  ("\M-p" . #'scroll-down-line))
+  ("C-v" . nil)
+  ("M-n" . #'scroll-up-line)
+  ("M-p" . #'scroll-down-line)
+  ("C-x -" . #'split-window-vertically)
+  ("C-x |" . #'split-window-horizontally))
 
 (use-package font-lock
   :custom
