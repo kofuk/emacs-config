@@ -247,9 +247,8 @@
   (mozc-candidate-style 'echo-area))
 
 (use-package newst-reader
-  :defer t
   :config
-  (load "feeds")
+  (require 'feeds)
   (defun news ()
     (interactive)
     (newsticker-show-news)))
@@ -288,6 +287,8 @@
 (use-package so-long
   :config
   (global-so-long-mode t))
+
+(use-package source-line)
 
 (use-package subword
   :config
@@ -353,30 +354,11 @@
   :config
   (windmove-default-keybindings 'meta))
 
-(defmacro :? (obj &rest body)
-  "Evaluate BODY if OBJ is nil."
-  `(let ((arg ,obj))
-     (if arg
-         arg
-       ,@body)))
-
-(defun source-line ()
-  "Put line number string for current point or region to kill-ring in
-filename#L1-L2 form."
-  (interactive)
-  (let ((file (file-name-nondirectory (:? (buffer-file-name) ""))))
-    (kill-new
-     (if (use-region-p)
-         (let ((first (line-number-at-pos (region-beginning)))
-               (last (line-number-at-pos (region-end))))
-           (format "%s#L%d-L%d" file first last))
-       (format "%s#L%d" file (line-number-at-pos (point))))))
-  (deactivate-mark))
-
-(defun revert-buffer-noconfirm ()
+(defun revert-buffer-noconfirm (force-utf-8)
   "Reverts buffer data from assciated file, without any prompt"
-  (interactive)
-  (revert-buffer 1 1 1))
+  (interactive "P")
+  (let ((coding-system-for-read (if force-utf-8 'utf-8 nil)))
+    (revert-buffer 1 1 1)))
 
 (global-set-key (kbd "<f5>") #'revert-buffer-noconfirm)
 
