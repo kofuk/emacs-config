@@ -378,7 +378,7 @@
   (defun open-buffer (path)
     (message (concat "Open file requested from remote: " (file-name-nondirectory path)))
     (find-file-other-window path)
-    nil)
+    t)
   (let ((opener-interface (format "org.kofuk.EmacsOpener%d" (emacs-pid))))
     (dbus-register-method
      :session
@@ -386,7 +386,7 @@
      "/org/kofuk/EmacsOpener"
      opener-interface
      "OpenBuffer"
-     'open-buffer)))
+     #'open-buffer)))
 
 ;; Execute local lisp initialization.
 ;; Execute in the last step of init.el so that it doesn't disturb
