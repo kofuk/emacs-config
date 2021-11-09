@@ -131,6 +131,10 @@
   (if (executable-find "rust-analyzer")
       (add-to-list 'eglot-server-programs '(rust-mode . ("rust-analyzer")))))
 
+(use-package electric
+  :config
+  (electric-indent-mode -1))
+
 (use-package emacs
   :custom
   (indicate-empty-lines t)
@@ -368,6 +372,21 @@
       (insert-file-contents "/sys/class/dmi/id/chassis_type")
       (if (not (string= (buffer-string) "3\n"))
           (display-battery-mode 1))))
+
+(when (equal system-type 'gnu/linux)
+  (require 'dbus)
+  (defun open-buffer (path)
+    (message (concat "Open file requested from remote: " (file-name-nondirectory path)))
+    (find-file-other-window path)
+    nil)
+  (let ((opener-interface (format "org.kofuk.EmacsOpener%d" (emacs-pid))))
+    (dbus-register-method
+     :session
+     opener-interface
+     "/org/kofuk/EmacsOpener"
+     opener-interface
+     "OpenBuffer"
+     'open-buffer)))
 
 ;; Execute local lisp initialization.
 ;; Execute in the last step of init.el so that it doesn't disturb
