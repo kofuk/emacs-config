@@ -35,6 +35,12 @@
       <arg name=\"xml_data\" type=\"s\" direction=\"out\"/>
     </method>
   </interface>
+  <interface name=\"org.freedesktop.DBus.Properties\">
+    <method name=\"GetAll\">
+      <arg name=\"interface_name\" type=\"s\" direction=\"in\"/>
+      <arg name=\"properties\" type=\"a{sv}\" direction=\"out\"/>
+    </method>
+  </interface>
   <interface name=\"org.kofuk.EmacsOpener\">
     <method name=\"OpenBuffer\">
       <arg name=\"path\" direction=\"in\" type=\"s\" />
@@ -84,7 +90,17 @@
    "/org/kofuk/EmacsOpener"
    dbus-interface-introspectable
    "Introspect"
-   (lambda () remocon--introspect-xml-opener)))
+   (lambda () remocon--introspect-xml-opener))
+  ;; Implement org.freedesktop.DBus.Properties.GetAll to avoid usual DBus
+  ;; applications (which creates DBusProxy without DO_NOT_LOAD_PROPERTIES flag)
+  ;; to slow down.
+  (dbus-register-method
+   :session
+   opener-service-name
+   "/org/kofuk/EmacsOpener"
+   dbus-interface-properties
+   "GetAll"
+   (lambda (interface-name) '((:signature "{sv}")))))
 
 (defun remocon--turn-on ()
   (let ((opener-service-name (format "org.kofuk.EmacsOpener%d" (emacs-pid))))
