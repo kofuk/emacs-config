@@ -27,8 +27,7 @@
 (require 'dbus)
 
 (defconst remocon--introspect-xml-opener
-  (format
-   "<!DOCTYPE node PUBLIC \"-//freedesktop//DTD D-BUS Object Introspection 1.0//EN\"
+  "<!DOCTYPE node PUBLIC \"-//freedesktop//DTD D-BUS Object Introspection 1.0//EN\"
 \"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd\">
 <node>
   <interface name=\"org.freedesktop.DBus.Introspectable\">
@@ -36,13 +35,13 @@
       <arg name=\"xml_data\" type=\"s\" direction=\"out\"/>
     </method>
   </interface>
-  <interface name=\"org.kofuk.EmacsOpener%d\">
+  <interface name=\"org.kofuk.EmacsOpener\">
     <method name=\"OpenBuffer\">
       <arg name=\"path\" direction=\"in\" type=\"s\" />
       <arg name=\"opened\" direction=\"out\" type=\"b\" />
     </method>
   </interface>
-</node>" (emacs-pid)))
+</node>")
 
 (defun remocon--create-introspect-xml-for-child-node (node-name)
   (format
@@ -94,7 +93,7 @@
      :session
      opener-service-name
      "/org/kofuk/EmacsOpener"
-     opener-service-name
+     "org.kofuk.EmacsOpener"
      "OpenBuffer"
      #'remocon--handle-open-buffer))
   (message "D-Bus service enabled."))
