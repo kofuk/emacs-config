@@ -131,10 +131,6 @@
   (if (executable-find "rust-analyzer")
       (add-to-list 'eglot-server-programs '(rust-mode . ("rust-analyzer")))))
 
-(use-package electric
-  :config
-  (electric-indent-mode -1))
-
 (use-package emacs
   :custom
   (indicate-empty-lines t)
