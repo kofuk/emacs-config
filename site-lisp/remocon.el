@@ -26,18 +26,75 @@
 
 (require 'dbus)
 
+(defconst remocon--introspect-xml-opener
+  (format
+   "<!DOCTYPE node PUBLIC \"-//freedesktop//DTD D-BUS Object Introspection 1.0//EN\"
+\"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd\">
+<node>
+  <interface name=\"org.freedesktop.DBus.Introspectable\">
+    <method name=\"Introspect\">
+      <arg name=\"xml_data\" type=\"s\" direction=\"out\"/>
+    </method>
+  </interface>
+  <interface name=\"org.kofuk.EmacsOpener%d\">
+    <method name=\"OpenBuffer\">
+      <arg name=\"path\" direction=\"in\" type=\"s\" />
+      <arg name=\"opened\" direction=\"out\" type=\"b\" />
+    </method>
+  </interface>
+</node>" (emacs-pid)))
+
+(defun remocon--create-introspect-xml-for-child-node (node-name)
+  (format
+   "<!DOCTYPE node PUBLIC \"-//freedesktop//DTD D-BUS Object Introspection 1.0//EN\"
+\"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd\">
+<node>
+  <node name=\"%s\" />
+</node>" node-name))
+
 (defun remocon--handle-open-buffer (path)
     (message (concat "Open file requested from remote: " (file-name-nondirectory path)))
     (find-file-other-window path)
     t)
 
+(defun remocon--register-introspect-method (opener-service-name)
+  (dbus-register-method
+   :session
+   opener-service-name
+   "/"
+   dbus-interface-introspectable
+   "Introspect"
+   (lambda () (remocon--create-introspect-xml-for-child-node "org")))
+  (dbus-register-method
+   :session
+   opener-service-name
+   "/org"
+   dbus-interface-introspectable
+   "Introspect"
+   (lambda () (remocon--create-introspect-xml-for-child-node "kofuk")))
+  (dbus-register-method
+   :session
+   opener-service-name
+   "/org/kofuk"
+   dbus-interface-introspectable
+   "Introspect"
+   (lambda () (remocon--create-introspect-xml-for-child-node "EmacsOpener")))
+  (dbus-register-method
+   :session
+   opener-service-name
+   "/org/kofuk/EmacsOpener"
+   dbus-interface-introspectable
+   "Introspect"
+   (lambda () remocon--introspect-xml-opener)))
+
 (defun remocon--turn-on ()
-  (let ((opener-interface (format "org.kofuk.EmacsOpener%d" (emacs-pid))))
+  (let ((opener-service-name (format "org.kofuk.EmacsOpener%d" (emacs-pid))))
+    (remocon--register-introspect-method opener-service-name)
     (dbus-register-method
      :session
-     opener-interface
+     opener-service-name
      "/org/kofuk/EmacsOpener"
-     opener-interface
+     opener-service-name
      "OpenBuffer"
      #'remocon--handle-open-buffer))
   (message "D-Bus service enabled."))
