@@ -170,9 +170,7 @@
   ;; Don't warn file size up to 100MB.
   (large-file-warning-threshold  100000000)
   ;; Make Emacs to put '\n' at the end of file
-  (require-final-newline t)
-  :mode
-  ("PKGBUILD\\'" . shell-script-mode))
+  (require-final-newline t))
 
 (use-package frame
   :config
@@ -281,6 +279,10 @@
   (if (fboundp 'save-place-mode)
       (save-place-mode 1)
     (setq-default save-place t)))
+
+(use-package sh-script
+  :mode
+  ("PKGBUILD\\'" . sh-mode))
 
 (use-package simple
   :config
