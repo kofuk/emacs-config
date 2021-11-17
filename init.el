@@ -140,6 +140,7 @@
   (indent-tabs-mode nil)
   (history-delete-duplicates t)
   (initial-scratch-message nil)
+  (tab-width 4)
   :config
   ;; Completion
   (setq completion-ignore-case t)
@@ -148,8 +149,6 @@
   (set-fontset-font t 'symbol "Noto Color Emoji")
   ;; Simplify window title
   (setq frame-title-format '("%b - Emacs"))
-  ;; Keep scratch buffer empty
-  ;; Scroll the buffer
   :bind
   ;; Disable annoying key
   ("C-v" . nil)
