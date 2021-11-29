@@ -109,5 +109,35 @@ for editing markdown file and insert markdown image representation."
   (interactive "sVideo ID: ")
   (hugo-utils--insert-with-id-at-point "youtube" video-id))
 
+(defun hugo-new (post-name)
+  (interactive "sPost name: ")
+  (if (not (string-match "^[-a-zA-Z0-9]+/[-a-zA-Z0-9]+\\.md$" post-name))
+      (message "Malformed post-name.")
+    (let ((project-root
+           (if (and
+                (project-current)
+                (hugo-utils--hugo-project-p (project-root (project-current))))
+               (project-root (project-current))
+             (read-directory-name "Hugo project path: ")))
+          (post-cat-name (split-string post-name "/")))
+      (if (file-exists-p (concat project-root "/content/" post-name))
+          (message "Post already exists.")
+        (make-directory (concat project-root "/content/" (nth 0 post-cat-name)) t)
+        ;; Setup temp hugo project
+        (make-directory "/tmp/hugo-utils-tmp/archetypes" t)
+        (make-directory "/tmp/hugo-utils-tmp/content" t)
+        (with-temp-buffer
+          (write-file "/tmp/hugo-utils-tmp/config.toml"))
+        (copy-file
+         (concat project-root "/archetypes/default.md")
+         "/tmp/hugo-utils-tmp/archetypes/" t)
+        (let ((default-directory "/tmp/hugo-utils-tmp/"))
+          (call-process "hugo" nil nil nil "new" post-name))
+        (copy-file
+         (concat "/tmp/hugo-utils-tmp/content/" post-name)
+         (concat project-root "/content/" post-name) t)
+        (delete-directory "/tmp/hugo-utils-tmp" t)
+        (find-file (concat project-root "/content/" post-name))))))
+
 (provide 'hugo-utils)
 ;;; hugo-utils.el ends here

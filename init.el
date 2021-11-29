@@ -205,6 +205,8 @@
   :custom
   (global-hl-line-mode t))
 
+(use-package hugo-utils)
+
 ;; Backward compatibility
 (use-package linum
   :if (version< emacs-version "26.0.50")
@@ -216,10 +218,7 @@
   :defer t)
 
 (use-package markdown-mode
-  :ensure t
-  :defer t
-  :hook
-  (markdown-mode . (lambda () (require 'hugo-utils))))
+  :ensure t)
 
 (use-package meson-mode
   :ensure t
