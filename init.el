@@ -148,7 +148,24 @@
   (set-fontset-font t 'unicode "Noto Sans CJK JP")
   (set-fontset-font t 'symbol "Noto Color Emoji")
   ;; Simplify window title
-  (setq frame-title-format '("%b - Emacs"))
+  (setq frame-title-format
+        '(:eval
+          (let ((bn (buffer-name)))
+            (dotimes (i 2 result)
+              (setq result
+                    (if (string-match "^ ?\\*" bn)
+                        (concat
+                         (cond
+                          ((string= bn "*scratch*") "scratch")
+                          ((string= bn "*vterm*") "Terminal")
+                          ((string= bn "*Messages*") "Messages")
+                          ((string-match "^ \\*Minibuf-[0-9]+\\*$" bn)
+                           (if (= i 0)
+                               (setq bn (buffer-name (nth 1 (buffer-list))))
+                             bn))
+                          (t "%b"))
+                         " - Emacs")
+                        "%b - Emacs"))))))
   :bind
   ;; Disable annoying key
   ("C-v" . nil)
