@@ -63,6 +63,7 @@
   :ensure t
   :config
   (global-company-mode 1)
+  (setq company-backends (remove 'company-clang company-backends))
   (define-key company-active-map (kbd "C-n") #'company-select-next)
   (define-key company-active-map (kbd "C-p") #'company-select-previous)
   (define-key company-active-map (kbd "C-h") nil)
