@@ -147,7 +147,6 @@
   (setq completion-ignore-case t)
   ;; Use Noto font
   (set-fontset-font t 'unicode "Noto Sans CJK JP")
-  (set-fontset-font t 'symbol "Noto Color Emoji")
   ;; Simplify window title
   (setq frame-title-format
         '(:eval
@@ -174,6 +173,22 @@
   ("M-p" . #'scroll-down-line)
   ("C-x -" . #'split-window-vertically)
   ("C-x |" . #'split-window-horizontally))
+
+(use-package emacs
+  :if (version< emacs-version "28.0")
+  :config
+  (set-fontset-font t 'symbol "Noto Color Emoji"))
+
+(use-package emacs
+  :if (version<= "28.0" emacs-version)
+  :config
+  ;; Set Emoji font to "Noto Color Emoji" implicitly.
+  ;; Although it's Emacs' default but it doesn't used as-is because
+  ;; I specified different font above.
+  (set-fontset-font t 'emoji
+                    '("Noto Color Emoji" . "iso10646-1") nil 'prepend)
+  :custom
+  (mode-line-compact t))
 
 (use-package font-lock
   :custom

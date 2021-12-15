@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t -*-
+
 (if (eq system-type 'windows-nt)
     (cd "~"))
 
