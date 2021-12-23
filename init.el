@@ -282,6 +282,10 @@
     (interactive)
     (newsticker-show-news)))
 
+(use-package package
+  :custom
+  (package-native-compile t))
+
 (use-package paren
   :config
   (show-paren-mode t)
