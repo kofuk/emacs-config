@@ -190,10 +190,6 @@
   :custom
   (mode-line-compact t))
 
-(use-package font-lock
-  :custom
-  (font-lock-support-mode 'jit-lock-mode))
-
 (use-package files
   :custom
   ;; Backup file
