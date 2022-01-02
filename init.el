@@ -1,66 +1,80 @@
 ;;; -*- lexical-binding: t -*-
 
-(package-initialize)
-
 (if (version< emacs-version "27.1")
     (progn
       (load (locate-user-emacs-file "early-init.el"))))
 
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(customize-set-variable 'package-archives
+                        '(("melpa" . "https://melpa.org/packages/")
+                          ("gnu" . "https://elpa.gnu.org/packages/")))
+(package-initialize)
+;; Install leaf.el if it's not installed.
+(unless (package-installed-p 'leaf)
+  (package-refresh-contents)
+  (package-install 'leaf))
+
+;; Initialize leaf-keywords to use leaf's convenient functions later.
+(leaf leaf-keywords
+  :ensure t
+  :config
+  (leaf-keywords-init))
 
 (dolist (path '("site-lisp" "site-lisp-local" "third_party"))
   (add-to-list 'load-path (locate-user-emacs-file path)))
 
-;;; Package configurations
-
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
-
 ;; Configure theme first (to avoid flicker while startup)
-(use-package modus-themes
+(leaf modus-themes
+  :doc "Set Emacs's theme to modus vivendi theme."
   :ensure t
-  :custom
-  (modus-themes-italic-constructs t)
-  (modus-themes-bold-constructs t)
-  (modus-themes-fringes 'intense)
-  (modus-themes-paren-match '(bold))
-  (modus-themes-region '(bg-only))
-  (modus-themes-mode-line '(accented borderless))
+  :custom ((modus-themes-italic-constructs . t)
+           (modus-themes-bold-constructs . t)
+           (modus-themes-fringes . 'intense)
+           (modus-themes-paren-match . '(bold))
+           (modus-themes-region . '(bg-only))
+           (modus-themes-mode-line . '(accented borderless)))
   :config
   (modus-themes-load-themes)
   (modus-themes-load-vivendi))
 
-(use-package autoinsert
+(leaf autoinsert
+  :doc "Enable auto-insert-mode and add specific templates."
   :config
   (auto-insert-mode 1)
   (add-to-list 'auto-insert-alist
                '(("CMakeLists\\.txt\\'" . "CMake build configuration")
                  nil "cmake_minimum_required(VERSION 3.15)\n"
                  "project(" (read-string "Project: ") & ")\n" | -45
-                 _))
-  :custom
-  (auto-insert-directory (locate-user-emacs-file "inserts")))
+                 _)))
 
-(use-package cc-vars
-  :defer t
-  :hook
-  ;; comment style
-  (c-mode-common . (lambda () (c-toggle-comment-style -1)))
-  :custom
-  (c-basic-offset 4)
-  (c-default-style '((java-mode . "java") (awk-mode . "awk") (other . "bsd"))))
+(leaf battery
+  :if (file-exists-p "/sys/class/dmi/id/chassis_type")
+  :require t
+  :config
+  (with-temp-buffer
+      (insert-file-contents "/sys/class/dmi/id/chassis_type")
+      (if (not (string= (buffer-string) "3\n"))
+          (display-battery-mode 1))))
 
-(use-package clang-format+
-  :defer t
+(leaf buffer
+  :custom ((indicate-empty-lines . t)
+           (tab-width . 4)))
+
+(leaf cc-vars
+  :hook (c-mode-common-hook . (lambda ()
+                                ;; comment style
+                                (c-toggle-comment-style -1)))
+  :custom ((c-basic-offset . 4)
+           (c-default-style . '((java-mode . "java") (awk-mode . "awk") (other . "bsd")))))
+
+(leaf clang-format+
   :ensure t)
 
-(use-package cmake-mode
-  :defer t
+(leaf cmake-mode
   :ensure t)
 
-(use-package company
+(leaf company
   :ensure t
+  :require t
   :config
   (global-company-mode 1)
   (setq company-backends (remove 'company-clang company-backends))
@@ -69,342 +83,305 @@
   (define-key company-active-map (kbd "C-h") nil)
   (define-key company-active-map (kbd "C-S-h") #'company-show-doc-buffer)
   :bind
-  ("C-M-i" . 'company-complete)
-  :custom
-  (company-transformers '(company-sort-by-backend-importance))
-  (company-idle-delay 0)
-  (company-minimum-prefix-length 2)
-  (company-selection-wrap-around t)
-  (company-deabbrev-downcase nil))
+  (("C-M-i" . company-complete))
+  :custom ((company-transformers . '(company-sort-by-backend-importance))
+           (company-idle-delay . 0)
+           (company-minimum-prefix-length . 2)
+           (company-selection-wrap-around . t)
+           (company-deabbrev-downcase . nil)))
 
-(use-package company-go
-  :ensure t
-  :defer t)
+(leaf company-go
+  :ensure t)
 
-(use-package csharp-mode
-  :ensure t
-  :defer t)
+(leaf csharp-mode
+  :ensure t)
 
-(use-package cua-base
-  :defer t
+(leaf cua-base
   :bind
-  ("C-x SPC" . #'cua-rectangle-mark-mode))
+  (("C-x SPC" . cua-rectangle-mark-mode)))
 
-(use-package cus-edit
-  :config
-  ;; Custom location for Customize
-  (if (file-exists-p (locate-user-emacs-file "custom.el"))
-      (load-file (locate-user-emacs-file "custom.el")))
-  :custom
-  (custom-file (locate-user-emacs-file "custom.el")))
-
-(use-package delsel
+(leaf delsel
   :config
   ;; Overwrite selected area
   (delete-selection-mode 1))
 
-(use-package dired
-  :defer t
+(leaf dired
   :hook
   (dired-mode . (lambda () (dired-hide-details-mode))))
 
-(use-package display-line-numbers
-  :if (version<= "26.0.50" emacs-version)
+(leaf display-line-numbers
+  :emacs>= "26.0.50"
   :config
   (global-display-line-numbers-mode))
 
-(use-package dockerfile-mode
-  :defer t
+(leaf dockerfile-mode
   :ensure t)
 
-(use-package editorconfig
+(leaf editorconfig
   :ensure t
-  :defer t
   :config
   (editorconfig-mode 1))
 
-(use-package eglot
+(leaf eglot
   :ensure t
+  :require t
   :config
-  (dolist (mode '(c-mode c++-mode))
-    (add-to-list 'eglot-server-programs
-                 `(,mode . ("clangd"))))
   (if (executable-find "rust-analyzer")
       (add-to-list 'eglot-server-programs '(rust-mode . ("rust-analyzer")))))
 
-(use-package emacs
-  :custom
-  (indicate-empty-lines t)
-  (create-lockfiles nil)
-  ;; Start up screen
-  (inhibit-startup-screen t)
-  (indent-tabs-mode nil)
-  (history-delete-duplicates t)
-  (initial-scratch-message nil)
-  (tab-width 4)
-  :config
-  ;; Completion
-  (setq completion-ignore-case t)
-  ;; Use Noto font
-  (set-fontset-font t 'unicode "Noto Sans CJK JP")
-  ;; Simplify window title
-  (setq frame-title-format
-        '(:eval
-          (let ((bn (buffer-name)))
-            (dotimes (i 2 result)
-              (setq result
-                    (if (string-match "^ ?\\*" bn)
-                        (concat
-                         (cond
-                          ((string= bn "*scratch*") "scratch")
-                          ((string= bn "*vterm*") "Terminal")
-                          ((string= bn "*Messages*") "Messages")
-                          ((string-match "^ \\*Minibuf-[0-9]+\\*$" bn)
-                           (if (= i 0)
-                               (setq bn (buffer-name (nth 1 (buffer-list))))
-                             bn))
-                          (t "%b"))
-                         " - Emacs")
-                        "%b - Emacs"))))))
-  :bind
-  ;; Disable annoying key
-  ("C-v" . nil)
-  ("M-n" . #'scroll-up-line)
-  ("M-p" . #'scroll-down-line)
-  ("C-x -" . #'split-window-vertically)
-  ("C-x |" . #'split-window-horizontally))
+(leaf filelock
+  :custom ((create-lockfiles . nil)))
 
-(use-package emacs
-  :if (version< emacs-version "28.0")
+(leaf files
+  :require t
+  :config
+  (defun revert-buffer-noconfirm (force-utf-8)
+    "Reverts buffer data from assciated file, without any prompt"
+    (interactive "P")
+    (let ((coding-system-for-read (if force-utf-8 'utf-8 nil)))
+      (revert-buffer 1 1 1)))
+  :custom (;; Backup file
+           (backup-directory-alist . `((".*" . ,(locate-user-emacs-file "backups"))))
+           (auto-save-default . nil)
+           ;; Don't warn file size up to 100MB.
+           (large-file-warning-threshold .  100000000)
+           ;; Make Emacs to put '\n' at the end of file
+           (require-final-newline . t))
+  :bind
+  (("<f5>" . revert-buffer-noconfirm)))
+
+(leaf frame
+  :config
+  (set-cursor-color "white"))
+
+(leaf fontset
+  :emacs< "28.0"
   :config
   (set-fontset-font t 'symbol "Noto Color Emoji"))
 
-(use-package emacs
-  :if (version<= "28.0" emacs-version)
+(leaf fontset
+  :emacs>= "28.0"
   :config
   ;; Set Emoji font to "Noto Color Emoji" implicitly.
   ;; Although it's Emacs' default but it doesn't used as-is because
   ;; I specified different font above.
   (set-fontset-font t 'emoji
                     '("Noto Color Emoji" . "iso10646-1") nil 'prepend)
-  :custom
-  (mode-line-compact t))
+  :custom ((mode-line-compact . t)))
 
-(use-package files
-  :custom
-  ;; Backup file
-  (backup-directory-alist `((".*" . ,(locate-user-emacs-file "backups"))))
-  (auto-save-default nil)
-  ;; Don't warn file size up to 100MB.
-  (large-file-warning-threshold  100000000)
-  ;; Make Emacs to put '\n' at the end of file
-  (require-final-newline t))
-
-(use-package frame
-  :config
-  (set-cursor-color "white"))
-
-(use-package gdb-mi
-  :defer t
+(leaf gdb-mi
   :hook
   (gdb-mode . (lambda () (gud-tooltip-mode t)))
-  :config
-  (setq gdb-many-windows t)
-  (setq gdb-use-separate-io-buffer t)
-  (setq gud-tooltip-echo-area t))
+  :setq ((gdb-use-separate-io-buffer . t))
+  :custom ((gdb-many-windows . t)
+           (gud-tooltip-echo-area . t)))
 
-(use-package git-gutter
-  :defer t
+(leaf git-gutter
   :ensure t
-  :custom
-  (global-git-gutter-mode t))
+  :custom ((global-git-gutter-mode . t)))
 
-(use-package go-mode
-  :defer t
+(leaf go-mode
   :ensure t)
 
-(use-package highlight-indent-guides
+(leaf highlight-indent-guides
   :ensure t
-  :defer t
   :hook
-  (prog-mode . (lambda () (highlight-indent-guides-mode t))))
+  (prog-mode-hook . (lambda () (highlight-indent-guides-mode t))))
 
-(use-package hl-line-mode
-  :defer t
-  :custom
-  (global-hl-line-mode t))
+(leaf hl-line-mode
+  :custom ((global-hl-line-mode . t)))
 
-(use-package hugo-utils)
+(leaf indent
+  :custom ((indent-tabs-mode . nil)))
 
-;; Backward compatibility
-(use-package linum
-  :if (version< emacs-version "26.0.50")
+(leaf hugo-utils
+  :require t)
+
+(leaf linum
+  :emacs< "26.0.50"
   :config
   (global-linum-mode t))
 
-(use-package lua-mode
-  :ensure t
-  :defer t)
-
-(use-package markdown-mode
+(leaf lua-mode
   :ensure t)
 
-(use-package meson-mode
-  :ensure t
-  :defer t)
+(leaf markdown-mode
+  :ensure t)
 
-(use-package minibuffer
-  :custom
-  (read-file-name-completion-ignore-case t))
+(leaf meson-mode
+  :ensure t)
 
-(use-package moody
+(leaf minibuf
+  :custom ((history-delete-duplicates . t))
+  :setq
+  ;; Completion
+  (completion-ignore-case . t))
+
+(leaf minibuffer
+  :custom ((read-file-name-completion-ignore-case . t)))
+
+(leaf moody
   :ensure t
   :config
   (moody-replace-mode-line-buffer-identification)
   (moody-replace-vc-mode))
 
-(use-package mozc
+(leaf mozc
   :if (executable-find "mozc_emacs_helper")
   :ensure t
-  :defer t
-  :custom
-  (default-input-method "japanese-mozc")
-  (mozc-candidate-style 'echo-area))
+  :custom ((default-input-method . "japanese-mozc")
+           (mozc-candidate-style . 'echo-area)))
 
-(use-package newst-reader
+(leaf newst-reader
+  :require t
   :config
-  (require 'feeds)
-  (defun news ()
+  (leaf feeds
+    :require t
+    :config
+    (defun news ()
     (interactive)
-    (newsticker-show-news)))
+    (newsticker-show-news))))
 
-(use-package package
-  :custom
-  (package-native-compile t))
+(leaf package
+  :custom ((package-native-compile . t)))
 
-(use-package paren
+(leaf paren
   :config
   (show-paren-mode t)
-  :custom
-  (show-paren-style 'mixed))
+  :custom ((show-paren-style . 'mixed)))
 
-(use-package remocon
+(leaf remocon
+  :require t
   :config
   (remocon-mode t))
 
-(use-package sass-mode
-  :ensure t
-  :defer t)
+(leaf sass-mode
+  :ensure t)
 
-(use-package satysfi
+(leaf satysfi
   :config
   (if (equal system-type 'gnu/linux)
       (setq satysfi-pdf-viewer-command "evince"))
   :mode
-  ("\\.saty\\'" . satysfi-mode)
-  ("\\.satyh\\'" . satysfi-mode))
+  ("\\.saty\\'" "\\.satyh\\'"))
 
-(use-package saveplace
+(leaf saveplace
   :config
   ;; Save cursor position
   (if (fboundp 'save-place-mode)
       (save-place-mode 1)
     (setq-default save-place t)))
 
-(use-package sh-script
+(leaf sh-script
   :mode
-  ("PKGBUILD\\'" . sh-mode))
+  ("PKGBUILD\\'"))
 
-(use-package simple
+(leaf simple
   :config
   (line-number-mode 1)
   (column-number-mode 1)
   (size-indication-mode 1))
 
-(use-package so-long
+(leaf so-long
   :config
   (global-so-long-mode t))
 
-(use-package source-line)
+(leaf source-line
+  :require t)
 
-(use-package subword
+(leaf startup
+  :custom (;; Start up screen
+           (inhibit-startup-screen . t)
+           (initial-scratch-message . nil)))
+
+(leaf subword
   :config
   ;; Recognize words in camelCaseString.
   (global-subword-mode t))
 
-(use-package rust-mode
-  :ensure t
-  :defer t)
+(leaf rust-mode
+  :ensure t)
 
-(use-package undo-tree
+(leaf undo-tree
   :ensure t
   :config
   (global-undo-tree-mode t)
-  :custom
-  (undo-tree-mode-lighter ""))
+  :custom ((undo-tree-mode-lighter . "")))
 
-(use-package vc-hooks
-  :custom
-  ;; Follow symbolic links to versioned files
-  (vc-follow-symlinks t))
+(leaf vc-hooks
+  :custom (;; Follow symbolic links to versioned files
+           (vc-follow-symlinks . t)))
 
-(use-package verilog-mode
-  :defer t
+(leaf verilog-mode
   :hook
   ;; Disable auto insertion of new line after `;'.
-  (verilog-mode . (lambda () (define-key verilog-mode-map ";" nil))))
+  (verilog-mode-hook . (lambda () (define-key verilog-mode-map ";" nil))))
 
-(use-package vterm
+(leaf vterm
   :if (equal system-type 'gnu/linux)
   :ensure t
-  :config
-  (define-key vterm-mode-map (kbd "C-v") nil)
-  (define-key vterm-mode-map (kbd "C-v C-v") #'vterm-send-C-v)
-  (define-key vterm-mode-map (kbd "C-v ESC") #'vterm-copy-mode)
-  (define-key vterm-mode-map (kbd "C-y") #'vterm-yank)
-  (define-key vterm-copy-mode-map (kbd "ESC") #'vterm-copy-mode))
+  :bind-keymap
+  (:vterm-mode-map
+   ("C-v" . nil)
+   ("C-v C-v" . #'vterm-send-C-v)
+   ("C-v ESC" . #'vterm-copy-mode)
+   ("C-y" . #'vterm-yank)
+   ("ESC" . #'vterm-copy-mode)))
 
-(use-package web-mode
+(leaf web-mode
   :ensure t
-  :defer t
   :mode
-  (("\\.php\\'" . web-mode)
-   ("\\.html?\\'" . web-mode)
-   ("\\.jsx\\'" . web-mode))
-  :custom
-  (web-mode-markup-indent-offset 2)
-  (web-mode-auto-close-style 2)
-  (web-mode-enable-current-element-highlight t))
+  ("\\.php\\'" "\\.html?\\'" "\\.jsx\\'")
+  :custom ((web-mode-markup-indent-offset . 2)
+           (web-mode-auto-close-style . 2)
+           (web-mode-enable-current-element-highlight . t)))
 
-(use-package which-func
+(leaf which-func
   :config
   (which-function-mode t))
 
-(use-package whitespace
+(leaf whitespace
   :config
   (global-whitespace-mode 1)
-  :custom
-  ;; Show whitespaces
-  (whitespace-style '(face trailing tabs tab-mark)))
+  :custom (;; Show whitespaces
+           (whitespace-style '(face trailing tabs tab-mark))))
 
-(use-package windmove
+(leaf windmove
   :config
   (windmove-default-keybindings 'meta))
 
-(defun revert-buffer-noconfirm (force-utf-8)
-  "Reverts buffer data from assciated file, without any prompt"
-  (interactive "P")
-  (let ((coding-system-for-read (if force-utf-8 'utf-8 nil)))
-    (revert-buffer 1 1 1)))
+(leaf window
+  :config
+  ;; Use Noto font
+  (set-fontset-font t 'unicode "Noto Sans CJK JP")
+  :bind (;; Disable annoying key
+         ("C-v" . nil)
+         ("M-n" . scroll-up-line)
+         ("M-p" . scroll-down-line)
+         ("C-x -" . split-window-vertically)
+         ("C-x |" . split-window-horizontally)))
 
-(global-set-key (kbd "<f5>") #'revert-buffer-noconfirm)
-
-;; Display battery status only on laptop.
-(if (file-exists-p "/sys/class/dmi/id/chassis_type")
-    (with-temp-buffer
-      (insert-file-contents "/sys/class/dmi/id/chassis_type")
-      (if (not (string= (buffer-string) "3\n"))
-          (display-battery-mode 1))))
+(leaf xdisp
+  :setq
+  ;; Simplify window title
+  (frame-title-format
+   . '(:eval
+       (let ((bn (buffer-name)))
+         (dotimes (i 2 result)
+           (setq result
+                 (if (string-match "^ ?\\*" bn)
+                     (concat
+                      (cond
+                       ((string= bn "*scratch*") "scratch")
+                       ((string= bn "*vterm*") "Terminal")
+                       ((string= bn "*Messages*") "Messages")
+                       ((string-match "^ \\*Minibuf-[0-9]+\\*$" bn)
+                        (if (= i 0)
+                            (setq bn (buffer-name (nth 1 (buffer-list))))
+                          bn))
+                       (t "%b"))
+                      " - Emacs")
+                   "%b - Emacs")))))))
 
 ;; Execute local lisp initialization.
 ;; Execute in the last step of init.el so that it doesn't disturb
@@ -413,4 +390,4 @@
     (load-file (locate-user-emacs-file "init-local.el")))
 
 (setq file-name-handler-alist my-saved-file-name-handler-alist)
-(setq gc-cons-threshold 16777216)
+(setq gc-cons-threshold 134217728)
