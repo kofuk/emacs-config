@@ -155,6 +155,11 @@
   (set-cursor-color "white"))
 
 (leaf fontset
+  :config
+  ;; Use Noto font
+  (set-fontset-font t 'unicode "Noto Sans CJK JP"))
+
+(leaf fontset
   :emacs< "28.0"
   :config
   (set-fontset-font t 'symbol "Noto Color Emoji"))
@@ -351,9 +356,6 @@
   (windmove-default-keybindings 'meta))
 
 (leaf window
-  :config
-  ;; Use Noto font
-  (set-fontset-font t 'unicode "Noto Sans CJK JP")
   :bind (;; Disable annoying key
          ("C-v" . nil)
          ("M-n" . scroll-up-line)
