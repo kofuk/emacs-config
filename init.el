@@ -100,6 +100,10 @@
   :bind
   (("C-x SPC" . cua-rectangle-mark-mode)))
 
+(leaf cus-edit
+  :if (equal system-type 'gnu/linux)
+  :custom ((custom-file . "/dev/null")))
+
 (leaf delsel
   :config
   ;; Overwrite selected area
@@ -279,7 +283,7 @@
 
 (leaf sh-script
   :mode
-  ("PKGBUILD\\'"))
+  (("PKGBUILD\\'" . sh-mode)))
 
 (leaf simple
   :config
