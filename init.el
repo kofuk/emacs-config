@@ -146,6 +146,7 @@
       (revert-buffer 1 1 1)))
   :custom (;; Backup file
            (backup-directory-alist . `((".*" . ,(locate-user-emacs-file "backups"))))
+           (make-backup-files . nil)
            (auto-save-default . nil)
            ;; Don't warn file size up to 100MB.
            (large-file-warning-threshold .  100000000)
@@ -301,7 +302,8 @@
 (leaf startup
   :custom (;; Start up screen
            (inhibit-startup-screen . t)
-           (initial-scratch-message . nil)))
+           (initial-scratch-message . nil)
+           (auto-save-list-file-prefix . nil)))
 
 (leaf subword
   :config
@@ -353,7 +355,7 @@
   :config
   (global-whitespace-mode 1)
   :custom (;; Show whitespaces
-           (whitespace-style '(face trailing tabs tab-mark))))
+           (whitespace-style . '(face trailing tabs tab-mark))))
 
 (leaf windmove
   :config
@@ -388,6 +390,11 @@
                        (t "%b"))
                       " - Emacs")
                    "%b - Emacs")))))))
+
+(leaf yaml-mode
+  :ensure t
+  :mode
+  ("\\.clang-tidy\\'"))
 
 ;; Execute local lisp initialization.
 ;; Execute in the last step of init.el so that it doesn't disturb
