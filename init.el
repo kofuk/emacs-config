@@ -216,7 +216,10 @@
   :ensure t)
 
 (leaf markdown-mode
-  :ensure t)
+  :ensure t
+  :hook (markdown-mode-hook . (lambda ()
+                                (keymap-unset markdown-mode-map "M-n" t)
+                                (keymap-unset markdown-mode-map "M-p" t))))
 
 (leaf meson-mode
   :ensure t)
