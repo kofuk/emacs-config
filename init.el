@@ -116,7 +116,9 @@
 (leaf display-line-numbers
   :emacs>= "26.0.50"
   :config
-  (global-display-line-numbers-mode))
+  (global-display-line-numbers-mode)
+  :custom ((display-line-numbers-type . 'relative)
+           (display-line-numbers-width-start . 3)))
 
 (leaf dockerfile-mode
   :ensure t)
