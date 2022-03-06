@@ -295,7 +295,8 @@
   :config
   (line-number-mode 1)
   (column-number-mode 1)
-  (size-indication-mode 1))
+  (size-indication-mode 1)
+  :bind (("C-h" . #'delete-backward-char)))
 
 (leaf so-long
   :config
