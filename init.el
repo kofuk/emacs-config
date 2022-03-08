@@ -47,7 +47,7 @@
                  _)))
 
 (leaf battery
-  :if (file-exists-p "/sys/class/dmi/id/chassis_type")
+  :if (and (equal system-type 'gnu/linux) (file-exists-p "/sys/class/dmi/id/chassis_type"))
   :require t
   :config
   (with-temp-buffer
@@ -56,8 +56,11 @@
           (display-battery-mode 1))))
 
 (leaf buffer
+  :setq-default ((bidi-display-reordering 'left-to-right)
+                 (bidi-paragraph-direction 'left-to-right))
   :custom ((indicate-empty-lines . t)
-           (tab-width . 4)))
+           (tab-width . 4)
+           (cursor-in-non-selected-windows . nil)))
 
 (leaf cc-vars
   :hook (c-mode-common-hook . (lambda ()
@@ -146,7 +149,8 @@
     (interactive "P")
     (let ((coding-system-for-read (if force-utf-8 'utf-8 nil)))
       (revert-buffer 1 1 1)))
-  :custom (;; Backup file
+  :custom ((auto-mode-case-fold . nil)
+           ;; Backup file
            (backup-directory-alist . `((".*" . ,(locate-user-emacs-file "backups"))))
            (make-backup-files . nil)
            (auto-save-default . nil)
@@ -160,6 +164,9 @@
 (leaf frame
   :config
   (set-cursor-color "white"))
+
+(leaf font
+  :setq ((inhibit-compacting-font-caches . t)))
 
 (leaf fontset
   :config
@@ -203,11 +210,11 @@
 (leaf hl-line-mode
   :custom ((global-hl-line-mode . t)))
 
-(leaf indent
-  :custom ((indent-tabs-mode . nil)))
-
 (leaf hugo-utils
   :require t)
+
+(leaf indent
+  :custom ((indent-tabs-mode . nil)))
 
 (leaf linum
   :emacs< "26.0.50"
@@ -262,8 +269,7 @@
 
 (leaf paren
   :config
-  (show-paren-mode t)
-  :custom ((show-paren-style . 'mixed)))
+  (show-paren-mode t))
 
 (leaf remocon
   :require t
@@ -282,10 +288,7 @@
 
 (leaf saveplace
   :config
-  ;; Save cursor position
-  (if (fboundp 'save-place-mode)
-      (save-place-mode 1)
-    (setq-default save-place t)))
+  (save-place-mode t))
 
 (leaf sh-script
   :mode
@@ -296,7 +299,8 @@
   (line-number-mode 1)
   (column-number-mode 1)
   (size-indication-mode 1)
-  :bind (("C-h" . #'delete-backward-char)))
+  :bind (("C-h" . #'delete-backward-char))
+  :custom ((idle-update-delay . 1.0)))
 
 (leaf so-long
   :config
@@ -306,10 +310,12 @@
   :require t)
 
 (leaf startup
-  :custom (;; Start up screen
+  :custom ((inhibit-startup-echo-area-message . t)
+           ;; Start up screen
            (inhibit-startup-screen . t)
            (initial-scratch-message . nil)
-           (auto-save-list-file-prefix . nil)))
+           (auto-save-list-file-prefix . nil)
+           (inhibit-default-init . t)))
 
 (leaf subword
   :config
@@ -318,6 +324,11 @@
 
 (leaf rust-mode
   :ensure t)
+
+(leaf tooltip
+  :require t
+  :config
+  (tooltip-mode -1))
 
 (leaf undo-tree
   :ensure t
@@ -373,29 +384,23 @@
          ("M-n" . scroll-up-line)
          ("M-p" . scroll-down-line)
          ("C-x -" . split-window-vertically)
-         ("C-x |" . split-window-horizontally)))
+         ("C-x |" . split-window-horizontally))
+  :custom ((fast-but-imprecise-scrolling . t)))
 
 (leaf xdisp
-  :setq
-  ;; Simplify window title
-  (frame-title-format
-   . '(:eval
-       (let ((bn (buffer-name)))
-         (dotimes (i 2 result)
-           (setq result
-                 (if (string-match "^ ?\\*" bn)
-                     (concat
-                      (cond
-                       ((string= bn "*scratch*") "scratch")
-                       ((string= bn "*vterm*") "Terminal")
-                       ((string= bn "*Messages*") "Messages")
-                       ((string-match "^ \\*Minibuf-[0-9]+\\*$" bn)
-                        (if (= i 0)
-                            (setq bn (buffer-name (nth 1 (buffer-list))))
-                          bn))
-                       (t "%b"))
-                      " - Emacs")
-                   "%b - Emacs")))))))
+  :setq ((bidi-inhibit-bpa . t)
+         (redisplay-skip-fontification-on-input . t)
+         ;; Simplify window title
+         (frame-title-format
+          . '(:eval
+              (let ((bn (buffer-name)))
+                (concat (cond
+                         ((string= bn "*scratch*") "scratch")
+                         ((string= bn "*vterm*") "Terminal")
+                         ((string= bn "*Messages*") "Messages")
+                         (t "%b"))
+                        " - Emacs")
+                "%b - Emacs")))))
 
 (leaf yaml-mode
   :ensure t
