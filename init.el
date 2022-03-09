@@ -93,9 +93,6 @@
            (company-selection-wrap-around . t)
            (company-deabbrev-downcase . nil)))
 
-(leaf company-go
-  :ensure t)
-
 (leaf csharp-mode
   :ensure t)
 
@@ -216,6 +213,9 @@
 (leaf indent
   :custom ((indent-tabs-mode . nil)))
 
+(leaf json-mode
+  :ensure t)
+
 (leaf linum
   :emacs< "26.0.50"
   :config
@@ -329,6 +329,14 @@
   :require t
   :config
   (tooltip-mode -1))
+
+(leaf tree-sitter
+  :ensure (t tree-sitter-langs)
+  :require t
+  :config
+  (global-tree-sitter-mode t)
+  :hook
+  (tree-sitter-after-on-hook . tree-sitter-hl-mode))
 
 (leaf undo-tree
   :ensure t
