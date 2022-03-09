@@ -271,6 +271,12 @@
   :config
   (show-paren-mode t))
 
+(leaf pixel-scroll
+  :emacs>= "29.0.50"
+  :require t
+  :config
+  (pixel-scroll-mode t))
+
 (leaf remocon
   :require t
   :config
