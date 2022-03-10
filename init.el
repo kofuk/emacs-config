@@ -36,6 +36,12 @@
   (modus-themes-load-themes)
   (modus-themes-load-vivendi))
 
+(leaf all-the-icons
+  :ensure t
+  :config
+  (unless (file-exists-p "~/.local/share/fonts/all-the-icons.ttf")
+    (all-the-icons-install-fonts)))
+
 (leaf autoinsert
   :doc "Enable auto-insert-mode and add specific templates."
   :config
@@ -122,6 +128,17 @@
 
 (leaf dockerfile-mode
   :ensure t)
+
+(leaf doom-modeline
+  :ensure t
+  :setq ((doom-modeline-percent-position . "	")) ;; Dirty hack to align misc info to the right.
+  :init
+  (doom-modeline-mode t)
+  :custom ((doom-modeline-hud . t)
+           (doom-modeline-buffer-file-name-style . 'file-name)
+           (doom-modeline-minor-modes . t)
+           (doom-modeline-buffer-encoding . 'nondefault)
+           (doom-modeline-env-version . nil)))
 
 (leaf editorconfig
   :ensure t
@@ -242,11 +259,10 @@
 (leaf minibuffer
   :custom ((read-file-name-completion-ignore-case . t)))
 
-(leaf moody
+(leaf minions
   :ensure t
-  :config
-  (moody-replace-mode-line-buffer-identification)
-  (moody-replace-vc-mode))
+  :init
+  (minions-mode t))
 
 (leaf mozc
   :if (executable-find "mozc_emacs_helper")
@@ -296,15 +312,18 @@
   :config
   (save-place-mode t))
 
+(leaf scroll-bar
+  :init
+  (scroll-bar-mode -1))
+
 (leaf sh-script
   :mode
   (("PKGBUILD\\'" . sh-mode)))
 
 (leaf simple
   :config
-  (line-number-mode 1)
-  (column-number-mode 1)
-  (size-indication-mode 1)
+  (line-number-mode -1)
+  (column-number-mode -1)
   :bind (("C-h" . #'delete-backward-char))
   :custom ((idle-update-delay . 1.0)))
 
@@ -377,10 +396,6 @@
   :custom ((web-mode-markup-indent-offset . 2)
            (web-mode-auto-close-style . 2)
            (web-mode-enable-current-element-highlight . t)))
-
-(leaf which-func
-  :config
-  (which-function-mode t))
 
 (leaf whitespace
   :config
