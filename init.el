@@ -231,7 +231,15 @@
   :custom ((indent-tabs-mode . nil)))
 
 (leaf json-mode
-  :ensure t)
+  :ensure t
+  :hook ((json-mode-hook . (lambda () (make-local-variable 'js-indent-level) (setq js-indent-level 2)))))
+
+(leaf js
+  :mode ("tsconfig\\.json\\'")
+  :hook ((js-mode-hook . (lambda ()
+                           (when (string-match-p "tsconfig\\.json\\'" buffer-file-name)
+                             (make-local-variable 'js-indent-level)
+                             (setq js-indent-level 2))))))
 
 (leaf linum
   :emacs< "26.0.50"
@@ -293,6 +301,20 @@
   :config
   (pixel-scroll-mode t))
 
+(leaf project
+  :require (cl-generic)
+  :config
+  (cl-defmethod project-root ((project (head golang)))
+    (car (cdr project)))
+  :hook ((project-find-functions . (lambda (directory)
+                                     (while (and directory
+                                                 (not (string= (file-name-directory directory) (directory-file-name directory)))
+                                                 (not (file-exists-p (concat directory "go.mod"))))
+                                       (setq directory (file-name-directory (directory-file-name directory))))
+                                     (if (file-exists-p (concat directory "go.mod"))
+                                         `(golang ,directory)
+                                       nil)))))
+
 (leaf remocon
   :require t
   :config
@@ -321,9 +343,9 @@
   (("PKGBUILD\\'" . sh-mode)))
 
 (leaf simple
-  :config
+  :init
   (line-number-mode -1)
-  (column-number-mode -1)
+  (column-number-mode t)
   :bind (("C-h" . #'delete-backward-char))
   :custom ((idle-update-delay . 1.0)))
 
@@ -362,6 +384,15 @@
   (global-tree-sitter-mode t)
   :hook
   (tree-sitter-after-on-hook . tree-sitter-hl-mode))
+
+(leaf typescript-mode
+  :ensure t
+  :init
+  (define-derived-mode typescript-tsx-mode typescript-mode "TSX")
+  :config
+  (tree-sitter-require 'tsx)
+  (add-to-list 'tree-sitter-major-mode-language-alist '(typescript-tsx-mode . tsx))
+  :mode (("\\.tsx\\'" . typescript-tsx-mode)))
 
 (leaf undo-tree
   :ensure t
