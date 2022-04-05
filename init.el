@@ -472,8 +472,7 @@
                          ((string= bn "*vterm*") "Terminal")
                          ((string= bn "*Messages*") "Messages")
                          (t "%b"))
-                        " - Emacs")
-                "%b - Emacs")))))
+                        " - Emacs"))))))
 
 (leaf yaml-mode
   :ensure t
