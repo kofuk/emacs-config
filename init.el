@@ -39,7 +39,7 @@
 (leaf all-the-icons
   :ensure t
   :config
-  (unless (file-exists-p "~/.local/share/fonts/all-the-icons.ttf")
+  (unless (or (equal system-type 'windows-nt) (file-exists-p "~/.local/share/fonts/all-the-icons.ttf"))
     (all-the-icons-install-fonts)))
 
 (leaf autoinsert
@@ -201,6 +201,11 @@
   (set-fontset-font t 'emoji
                     '("Noto Color Emoji" . "iso10646-1") nil 'prepend)
   :custom ((mode-line-compact . t)))
+
+(leaf fontset
+  :if (equal system-type 'windows-nt)
+  :config
+  (add-to-list 'default-frame-alist '(font . "Source Code Pro-10")))
 
 (leaf gdb-mi
   :hook
