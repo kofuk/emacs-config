@@ -278,8 +278,16 @@
   (minions-mode t))
 
 (leaf mozc
-  :if (executable-find "mozc_emacs_helper")
+  :if (or (executable-find "mozc_emacs_helper")
+          (and (equal system-type 'windows-nt)
+               (executable-find "wsl")
+               ;; Use "Ubuntu" installation. Should I use variable to set Distro name?
+               (call-process "wsl" nil nil nil "-d" "Ubuntu" "-e" "command" "-v" "mozc_emacs_helper")))
   :ensure t
+  :config
+  (if (equal system-type 'windows-nt)
+      (setq mozc-helper-program-name "wsl"
+            mozc-helper-program-args '("-d" "Ubuntu" "-e" "mozc_emacs_helper" "--supress_stderr")))
   :custom ((default-input-method . "japanese-mozc")
            (mozc-candidate-style . 'echo-area)))
 
