@@ -185,7 +185,10 @@
 (leaf fontset
   :config
   ;; Use Noto font
-  (set-fontset-font t 'unicode "Noto Sans CJK JP"))
+  (set-fontset-font t 'unicode
+                    (if (equal system-type 'windows-nt)
+                        "Noto Sans JP"
+                      "Noto Sans CJK JP")))
 
 (leaf fontset
   :emacs< "28.0"
