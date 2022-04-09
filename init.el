@@ -336,6 +336,10 @@
   :config
   (remocon-mode t))
 
+(leaf ruler-mode
+  :hook
+  (window-configuration-change-hook . (lambda () (ruler-mode 1))))
+
 (leaf sass-mode
   :ensure t)
 
