@@ -63,7 +63,8 @@
 
 (leaf buffer
   :setq-default ((bidi-display-reordering 'left-to-right)
-                 (bidi-paragraph-direction 'left-to-right))
+                 (bidi-paragraph-direction 'left-to-right)
+                 (fill-column . 120))
   :custom ((indicate-empty-lines . t)
            (tab-width . 4)
            (cursor-in-non-selected-windows . nil)))
