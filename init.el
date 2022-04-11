@@ -124,7 +124,7 @@
   :emacs>= "26.0.50"
   :config
   (global-display-line-numbers-mode)
-  :custom ((display-line-numbers-type . 'relative)
+  :custom ((display-line-numbers-widen . t)
            (display-line-numbers-width-start . 3)))
 
 (leaf dockerfile-mode
@@ -366,7 +366,6 @@
 (leaf simple
   :init
   (line-number-mode -1)
-  (column-number-mode t)
   :bind (("C-h" . #'delete-backward-char))
   :custom ((idle-update-delay . 1.0)))
 
