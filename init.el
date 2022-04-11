@@ -103,13 +103,9 @@
 (leaf csharp-mode
   :ensure t)
 
-(leaf cua-base
-  :bind
-  (("C-x SPC" . cua-rectangle-mark-mode)))
-
 (leaf cus-edit
   :if (equal system-type 'gnu/linux)
-  :custom ((custom-file . "/dev/null")))
+  :custom ((custom-file . null-device)))
 
 (leaf delsel
   :config
@@ -295,22 +291,18 @@
   :custom ((default-input-method . "japanese-mozc")
            (mozc-candidate-style . 'echo-area)))
 
-(leaf newst-reader
-  :require t
-  :config
-  (leaf feeds
-    :require t
-    :config
-    (defun news ()
-    (interactive)
-    (newsticker-show-news))))
+(leaf multiple-cursors
+  :ensure t
+  :bind (("C-x SPC" . mc/edit-lines)))
 
 (leaf package
   :custom ((package-native-compile . t)))
 
 (leaf paren
   :config
-  (show-paren-mode t))
+  (show-paren-mode t)
+  :custom ((show-paren-when-point-inside-paren . t)
+           (show-paren-context-when-offscreen . 'child-frame)))
 
 (leaf pixel-scroll
   :emacs>= "29.0.50"
@@ -325,7 +317,8 @@
     (car (cdr project)))
   :hook ((project-find-functions . (lambda (directory)
                                      (while (and directory
-                                                 (not (string= (file-name-directory directory) (directory-file-name directory)))
+                                                 (not (string= (file-name-directory directory)
+                                                               (directory-file-name directory)))
                                                  (not (file-exists-p (concat directory "go.mod"))))
                                        (setq directory (file-name-directory (directory-file-name directory))))
                                      (if (file-exists-p (concat directory "go.mod"))
@@ -419,6 +412,7 @@
   :config
   (global-undo-tree-mode t)
   :custom ((undo-tree-mode-lighter . "")
+           (undo-tree-visualizer-diff . t)
            (undo-tree-auto-save-history . nil)))
 
 (leaf vc-hooks
