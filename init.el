@@ -419,7 +419,8 @@
   :ensure t
   :config
   (global-undo-tree-mode t)
-  :custom ((undo-tree-mode-lighter . "")))
+  :custom ((undo-tree-mode-lighter . "")
+           (undo-tree-auto-save-history . nil)))
 
 (leaf vc-hooks
   :custom (;; Follow symbolic links to versioned files

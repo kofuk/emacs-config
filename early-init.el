@@ -7,8 +7,8 @@
 (setq file-name-handler-alist nil)
 (setq gc-cons-threshold most-positive-fixnum)
 
-(setq default-frame-alist '((width . 100)
-                            (height . 35)
+(setq default-frame-alist '((width . 120)
+                            (height . 40)
                             (cursor-type . bar)
                             (menu-bar-lines . 0)
                             (tool-bar-lines . 0)))
