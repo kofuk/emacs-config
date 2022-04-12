@@ -149,6 +149,10 @@
   (if (executable-find "rust-analyzer")
       (add-to-list 'eglot-server-programs '(rust-mode . ("rust-analyzer")))))
 
+(leaf ffap
+  :config
+  (ffap-bindings))
+
 (leaf filelock
   :custom ((create-lockfiles . nil)))
 
