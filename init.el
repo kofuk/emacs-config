@@ -158,12 +158,6 @@
 
 (leaf files
   :require t
-  :config
-  (defun revert-buffer-noconfirm (force-utf-8)
-    "Reverts buffer data from assciated file, without any prompt"
-    (interactive "P")
-    (let ((coding-system-for-read (if force-utf-8 'utf-8 nil)))
-      (revert-buffer 1 1 1)))
   :custom ((auto-mode-case-fold . nil)
            ;; Backup file
            (backup-directory-alist . `((".*" . ,(locate-user-emacs-file "backups"))))
@@ -173,8 +167,11 @@
            (large-file-warning-threshold .  100000000)
            ;; Make Emacs to put '\n' at the end of file
            (require-final-newline . t))
-  :bind
-  (("<f5>" . revert-buffer-noconfirm)))
+  :bind (("<f5>" . (lambda (force-utf-8)
+                     "Reverts buffer data from assciated file, without any prompt"
+                     (interactive "P")
+                     (let ((coding-system-for-read (if force-utf-8 'utf-8 nil)))
+                       (revert-buffer 1 1 1))))))
 
 (leaf frame
   :config
@@ -228,7 +225,8 @@
 (leaf highlight-indent-guides
   :ensure t
   :hook
-  (prog-mode-hook . (lambda () (highlight-indent-guides-mode t))))
+  (prog-mode-hook . (lambda () (highlight-indent-guides-mode t)))
+  :custom ((highlight-indent-guides-responsive . 'stack)))
 
 (leaf hl-line-mode
   :custom ((global-hl-line-mode . t)))
