@@ -143,11 +143,25 @@
   (editorconfig-mode 1))
 
 (leaf eglot
-  :ensure t
+  :ensure (t eldoc-box)
   :require t
   :config
   (if (executable-find "rust-analyzer")
-      (add-to-list 'eglot-server-programs '(rust-mode . ("rust-analyzer")))))
+      (add-to-list 'eglot-server-programs '(rust-mode . ("rust-analyzer"))))
+  ;; Remove unneeded "\r" because it appears in doc buffer as "^M" and is annoying.
+  (advice-add 'eglot--format-markup :around
+              (lambda (orig-func &rest args)
+                (when (stringp (car args))
+                  (setf (car args) (string-replace "\r" "" (car args))))
+                (apply orig-func args)))
+  :custom ((eldoc-box-max-pixel-width . 600)
+           (eldoc-box-max-pixel-height . 800)
+           (eldoc-box-offset . '(16 24 24))
+           (eldoc-box-fringe-use-same-bg . nil)))
+
+(leaf eldoc
+  :hook
+  (eldoc-mode-hook . eldoc-box-hover-mode))
 
 (leaf ffap
   :config
@@ -334,7 +348,7 @@
 
 (leaf ruler-mode
   :hook
-  (window-configuration-change-hook . (lambda () (ruler-mode 1))))
+  (prog-mode-hook . (lambda () (ruler-mode 1))))
 
 (leaf sass-mode
   :ensure t)
