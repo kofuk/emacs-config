@@ -307,10 +307,6 @@
   :custom ((default-input-method . "japanese-mozc")
            (mozc-candidate-style . 'echo-area)))
 
-(leaf multiple-cursors
-  :ensure t
-  :bind (("C-x SPC" . mc/edit-lines)))
-
 (leaf package
   :custom ((package-native-compile . t)))
 
