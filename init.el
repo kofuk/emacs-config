@@ -236,12 +236,6 @@
 (leaf go-mode
   :ensure t)
 
-(leaf highlight-indent-guides
-  :ensure t
-  :hook
-  (prog-mode-hook . (lambda () (highlight-indent-guides-mode t)))
-  :custom ((highlight-indent-guides-responsive . 'stack)))
-
 (leaf hl-line-mode
   :custom ((global-hl-line-mode . t)))
 
@@ -275,6 +269,10 @@
   :hook (markdown-mode-hook . (lambda ()
                                 (keymap-unset markdown-mode-map "M-n" t)
                                 (keymap-unset markdown-mode-map "M-p" t))))
+
+(leaf menu-bar
+  :config
+  (menu-bar-mode -1))
 
 (leaf meson-mode
   :ensure t)
@@ -315,12 +313,6 @@
   (show-paren-mode t)
   :custom ((show-paren-when-point-inside-paren . t)
            (show-paren-context-when-offscreen . 'child-frame)))
-
-(leaf pixel-scroll
-  :emacs>= "29.0.50"
-  :require t
-  :config
-  (pixel-scroll-mode t))
 
 (leaf project
   :require (cl-generic)
@@ -398,9 +390,12 @@
   :ensure t)
 
 (leaf tooltip
-  :require t
   :config
   (tooltip-mode -1))
+
+(leaf tool-bar-mode
+  :config
+  (tool-bar-mode -1))
 
 (leaf tree-sitter
   :ensure (t tree-sitter-langs)
@@ -500,4 +495,5 @@
     (load-file (locate-user-emacs-file "init-local.el")))
 
 (setq file-name-handler-alist my-saved-file-name-handler-alist)
+(makunbound 'my-saved-file-name-handler-alist)
 (setq gc-cons-threshold 134217728)
