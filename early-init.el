@@ -11,6 +11,7 @@
                             (height . 40)
                             (cursor-type . bar)
                             (menu-bar-lines . 0)
-                            (tool-bar-lines . 0)))
+                            (tool-bar-lines . 0)
+                            (undecorated . t)))
 
 (setq frame-inhibit-implied-resize t)
