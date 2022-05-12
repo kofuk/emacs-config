@@ -31,7 +31,8 @@
            (modus-themes-fringes . 'intense)
            (modus-themes-paren-match . '(bold))
            (modus-themes-region . '(bg-only))
-           (modus-themes-mode-line . '(accented borderless)))
+           (modus-themes-mode-line . '(accented borderless))
+           (modus-themes-hl-line . '(intense)))
   :config
   (modus-themes-load-themes)
   (modus-themes-load-vivendi))
@@ -58,7 +59,8 @@
   :config
   (with-temp-buffer
       (insert-file-contents "/sys/class/dmi/id/chassis_type")
-      (if (not (string= (buffer-string) "3\n"))
+      (goto-char (point-min))
+      (when (not (= (thing-at-point 'number) 3))
           (display-battery-mode 1))))
 
 (leaf buffer
@@ -476,12 +478,11 @@
          (frame-title-format
           . '(:eval
               (let ((bn (buffer-name)))
-                (concat (cond
-                         ((string= bn "*scratch*") "scratch")
-                         ((string= bn "*vterm*") "Terminal")
-                         ((string= bn "*Messages*") "Messages")
-                         (t "%b"))
-                        " - Emacs"))))))
+                (cond
+                 ((string= bn "*scratch*") "scratch")
+                 ((string= bn "*vterm*") "Terminal")
+                 ((string= bn "*Messages*") "Messages")
+                 (t "%b")))))))
 
 (leaf yaml-mode
   :ensure t
