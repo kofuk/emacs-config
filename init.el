@@ -90,12 +90,13 @@
   :config
   (global-company-mode 1)
   (setq company-backends (remove 'company-clang company-backends))
-  (define-key company-active-map (kbd "C-n") #'company-select-next)
-  (define-key company-active-map (kbd "C-p") #'company-select-previous)
-  (define-key company-active-map (kbd "C-h") nil)
-  (define-key company-active-map (kbd "C-S-h") #'company-show-doc-buffer)
   :bind
-  (("C-M-i" . company-complete))
+  (("C-M-i" . company-complete)
+   (:company-active-map
+    ("C-n" . #'company-select-next)
+    ("C-p" . #'company-select-previous)
+    ("C-S-h" . #'company-show-doc-buffer)
+    ("C-h")))
   :custom ((company-transformers . '(company-sort-by-backend-importance))
            (company-idle-delay . 0)
            (company-minimum-prefix-length . 2)
@@ -268,9 +269,9 @@
 
 (leaf markdown-mode
   :ensure t
-  :hook (markdown-mode-hook . (lambda ()
-                                (keymap-unset markdown-mode-map "M-n" t)
-                                (keymap-unset markdown-mode-map "M-p" t))))
+  :bind ((:markdown-mode-map
+          ("M-n")
+          ("M-p"))))
 
 (leaf menu-bar
   :config
@@ -429,16 +430,15 @@
            (vc-follow-symlinks . t)))
 
 (leaf verilog-mode
-  :hook
-  ;; Disable auto insertion of new line after `;'.
-  (verilog-mode-hook . (lambda () (define-key verilog-mode-map ";" nil))))
+  :bind ((:verilog-mode-map
+          (";"))))
 
 (leaf vterm
   :if (equal system-type 'gnu/linux)
   :ensure t
   :bind-keymap
   (:vterm-mode-map
-   ("C-v" . nil)
+   ("C-v")
    ("C-v C-v" . #'vterm-send-C-v)
    ("C-v ESC" . #'vterm-copy-mode)
    ("C-y" . #'vterm-yank)
@@ -464,11 +464,11 @@
 
 (leaf window
   :bind (;; Disable annoying key
-         ("C-v" . nil)
-         ("M-n" . scroll-up-line)
-         ("M-p" . scroll-down-line)
-         ("C-x -" . split-window-vertically)
-         ("C-x |" . split-window-horizontally))
+         ("C-v")
+         ("M-n" . #'scroll-up-line)
+         ("M-p" . #'scroll-down-line)
+         ("C-x -" . #'split-window-vertically)
+         ("C-x |" . #'split-window-horizontally))
   :custom ((fast-but-imprecise-scrolling . t)))
 
 (leaf xdisp
