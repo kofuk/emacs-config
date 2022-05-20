@@ -400,6 +400,12 @@
   :config
   (tool-bar-mode -1))
 
+(leaf tramp
+  :require t
+  :config
+  (add-to-list 'tramp-remote-path 'tramp-default-remote-path)
+  :custom ((tramp-histfile-override . t)))
+
 (leaf tree-sitter
   :ensure (t tree-sitter-langs)
   :require t
