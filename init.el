@@ -166,6 +166,11 @@
   :hook
   (eldoc-mode-hook . eldoc-box-hover-mode))
 
+(leaf emmet-mode
+  :ensure t
+  :hook
+  (web-mode-hook . emmet-mode))
+
 (leaf ffap
   :config
   (ffap-bindings))
@@ -455,7 +460,7 @@
   :mode
   ("\\.php\\'" "\\.html?\\'" "\\.jsx\\'")
   :custom ((web-mode-markup-indent-offset . 2)
-           (web-mode-auto-close-style . 2)
+           (web-mode-auto-close-style . 0)
            (web-mode-enable-current-element-highlight . t)))
 
 (leaf whitespace
