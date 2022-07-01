@@ -253,9 +253,8 @@
 (leaf indent
   :custom ((indent-tabs-mode . nil)))
 
-(leaf json-mode
-  :ensure t
-  :hook ((json-mode-hook . (lambda () (make-local-variable 'js-indent-level) (setq js-indent-level 2)))))
+(leaf jsonian
+  :ensure t)
 
 (leaf js
   :mode ("tsconfig\\.json\\'")
