@@ -315,6 +315,9 @@
 (leaf package
   :custom ((package-native-compile . t)))
 
+(leaf paragraphs
+  :bind (("M-[" . backward-paragraph) ("M-]" . forward-paragraph)))
+
 (leaf paren
   :config
   (show-paren-mode t)
@@ -344,6 +347,9 @@
 (leaf ruler-mode
   :hook
   (prog-mode-hook . (lambda () (ruler-mode 1))))
+
+(leaf rust-mode
+  :ensure t)
 
 (leaf sass-mode
   :ensure t)
@@ -392,9 +398,6 @@
   :config
   ;; Recognize words in camelCaseString.
   (global-subword-mode t))
-
-(leaf rust-mode
-  :ensure t)
 
 (leaf tooltip
   :config
