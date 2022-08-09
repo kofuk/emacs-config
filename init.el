@@ -502,6 +502,10 @@
   :mode
   ("\\.clang-tidy\\'"))
 
+(leaf zig-mode
+  :ensure t
+  :custom ((zig-format-on-save . nil)))
+
 ;; Execute local lisp initialization.
 ;; Execute in the last step of init.el so that it doesn't disturb
 ;; other package's initialization.
