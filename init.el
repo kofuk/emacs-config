@@ -171,10 +171,6 @@
   :hook
   (web-mode-hook . emmet-mode))
 
-(leaf ffap
-  :config
-  (ffap-bindings))
-
 (leaf filelock
   :custom ((create-lockfiles . nil)))
 
