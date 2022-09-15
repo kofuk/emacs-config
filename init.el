@@ -308,6 +308,10 @@
   :custom ((default-input-method . "japanese-mozc")
            (mozc-candidate-style . 'echo-area)))
 
+(leaf mule-cmds
+  :config
+  (prefer-coding-system 'utf-8-unix))
+
 (leaf package
   :custom ((package-native-compile . t)))
 
