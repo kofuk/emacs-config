@@ -71,6 +71,9 @@
            (tab-width . 4)
            (cursor-in-non-selected-windows . nil)))
 
+(leaf buffile
+  :require t)
+
 (leaf cc-vars
   :hook (c-mode-common-hook . (lambda ()
                                 ;; comment style
@@ -266,6 +269,13 @@
 
 (leaf lua-mode
   :ensure t)
+
+(leaf make-mode
+  :bind ((:makefile-gmake-mode-map
+          ("M-n")
+          ("M-p")
+          ("M-[" . makefile-previous-dependency)
+          ("M-]" . makefile-next-dependency))))
 
 (leaf markdown-mode
   :ensure t
