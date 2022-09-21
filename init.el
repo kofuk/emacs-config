@@ -421,7 +421,11 @@
   :require t
   :config
   (add-to-list 'tramp-remote-path 'tramp-default-remote-path)
-  :custom ((tramp-histfile-override . t)))
+  ;; This makes local .bash_history empty.
+  ;; I'll comment it out untill the bug fixed.
+  ;;:custom
+  ;;((tramp-histfile-override . t))
+  )
 
 (leaf tree-sitter
   :ensure (t tree-sitter-langs)
