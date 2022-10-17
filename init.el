@@ -283,6 +283,9 @@
           ("M-n")
           ("M-p"))))
 
+(leaf matching-punct
+  :require t)
+
 (leaf menu-bar
   :config
   (menu-bar-mode -1))
