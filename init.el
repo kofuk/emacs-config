@@ -480,7 +480,8 @@
   ("\\.php\\'" "\\.html?\\'" "\\.jsx\\'")
   :custom ((web-mode-markup-indent-offset . 2)
            (web-mode-auto-close-style . 0)
-           (web-mode-enable-current-element-highlight . t)))
+           (web-mode-enable-current-element-highlight . t)
+           (web-mode-enable-auto-indentation . nil)))
 
 (leaf whitespace
   :config
