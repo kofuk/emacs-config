@@ -328,6 +328,10 @@
 (leaf package
   :custom ((package-native-compile . t)))
 
+(leaf page
+  :bind (("C-x C-[" . backward-page)
+         ("C-x C-]" . forward-page)))
+
 (leaf paragraphs
   :bind (("M-[" . backward-paragraph) ("M-]" . forward-paragraph)))
 
