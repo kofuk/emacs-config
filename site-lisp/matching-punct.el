@@ -58,16 +58,28 @@
     (interactive "P")
     (matching-punct--apply-inside-matching-punct "<" ">" boundary kill-region))
 
-(global-set-key (kbd "C-c k (") #'kill-inside-paren)
-(global-set-key (kbd "C-c k )") #'kill-inside-paren)
-(global-set-key (kbd "C-c k [") #'kill-inside-single-bracket)
-(global-set-key (kbd "C-c k ]") #'kill-inside-single-bracket)
-(global-set-key (kbd "C-c k {") #'kill-inside-brace)
-(global-set-key (kbd "C-c k }") #'kill-inside-brace)
-(global-set-key (kbd "C-c k '") #'kill-inside-single-quote)
-(global-set-key (kbd "C-c k \"") #'kill-inside-quote)
-(global-set-key (kbd "C-c k <") #'kill-inside-angle-bracket)
-(global-set-key (kbd "C-c k >") #'kill-inside-angle-bracket)
+(defvar matching-punct-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "C-c C-o (") #'kill-inside-paren)
+    (define-key map (kbd "C-c C-o )") #'kill-inside-paren)
+    (define-key map (kbd "C-c C-o [") #'kill-inside-single-bracket)
+    (define-key map (kbd "C-c C-o ]") #'kill-inside-single-bracket)
+    (define-key map (kbd "C-c C-o {") #'kill-inside-brace)
+    (define-key map (kbd "C-c C-o }") #'kill-inside-brace)
+    (define-key map (kbd "C-c C-o '") #'kill-inside-single-quote)
+    (define-key map (kbd "C-c C-o \"") #'kill-inside-quote)
+    (define-key map (kbd "C-c C-o <") #'kill-inside-angle-bracket)
+    (define-key map (kbd "C-c C-o >") #'kill-inside-angle-bracket)
+    map)
+  "Keymap for matching-punct-mode.")
+
+(define-minor-mode matching-punct-mode
+  "Operate against matching punctuators."
+  :group 'tools
+  :lighter " {|}")
+
+(define-global-minor-mode global-matching-punct-mode matching-punct-mode
+  (lambda () (matching-punct-mode +1)))
 
 (provide 'matching-punct)
 ;;; matching-punct.el ends here

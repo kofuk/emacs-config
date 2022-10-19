@@ -284,7 +284,9 @@
           ("M-p"))))
 
 (leaf matching-punct
-  :require t)
+  :require t
+  :config
+  (global-matching-punct-mode 1))
 
 (leaf menu-bar
   :config
