@@ -54,7 +54,7 @@
 ;;; Code:
 
 (defmacro matching-punct--apply-inside-matching-punct (open close boundary func)
-  `(let ((orig-pt (point)) (level 0) (required-level) (start) (end) (b (if boundary 0 1)) (end-found))
+  `(let ((orig-pt (point)) (level 0) (required-level) (start) (end) (b (if ,boundary 0 1)) (end-found))
      (save-excursion
        (goto-char (point-min))
        (while (and (< (point) (point-max)) (not end-found))
@@ -95,27 +95,27 @@
 
 (defun kill-inside-paren (boundary)
     (interactive "P")
-    (matching-punct--apply-inside-matching-punct "(" ")" boundary kill-region))
+    (matching-punct--apply-inside-matching-punct ?\( ?\) boundary kill-region))
 
 (defun kill-inside-bracket (boundary)
     (interactive "P")
-    (matching-punct--apply-inside-matching-punct "[" "]" boundary kill-region))
+    (matching-punct--apply-inside-matching-punct ?\[ ?\] boundary kill-region))
 
 (defun kill-inside-brace (boundary)
     (interactive "P")
-    (matching-punct--apply-inside-matching-punct "{" "}" boundary kill-region))
+    (matching-punct--apply-inside-matching-punct ?{ ?} boundary kill-region))
 
 (defun kill-inside-single-quote (boundary)
     (interactive "P")
-    (matching-punct--apply-inside-matching-punct "'" "'" boundary kill-region))
+    (matching-punct--apply-inside-matching-punct ?' ?' boundary kill-region))
 
 (defun kill-inside-quote (boundary)
     (interactive "P")
-    (matching-punct--apply-inside-matching-punct "\"" "\"" boundary kill-region))
+    (matching-punct--apply-inside-matching-punct ?\" ?\" boundary kill-region))
 
 (defun kill-inside-angle-bracket (boundary)
     (interactive "P")
-    (matching-punct--apply-inside-matching-punct "<" ">" boundary kill-region))
+    (matching-punct--apply-inside-matching-punct ?< ?> boundary kill-region))
 
 (defvar matching-punct-mode-map
   (let ((map (make-sparse-keymap)))
