@@ -65,7 +65,7 @@
                      (setq start (point)))
                     ((not end)
                      (setq end (1+ (point))))
-                    (t (setq start end
+                    (t (setq start (1- end)
                              end (1+ (point)))))
                    (when (and start end (or (< orig-pt start)
                                             (and (<= start orig-pt) (< orig-pt end))))
