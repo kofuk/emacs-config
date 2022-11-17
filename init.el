@@ -172,7 +172,8 @@
 (leaf emmet-mode
   :ensure t
   :hook
-  (web-mode-hook . emmet-mode))
+  (web-mode-hook . emmet-mode)
+  (typescript-tsx-mode-hook . emmet-mode))
 
 (leaf filelock
   :custom ((create-lockfiles . nil)))
