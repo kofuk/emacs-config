@@ -149,7 +149,7 @@
   (editorconfig-mode 1))
 
 (leaf eglot
-  :ensure (t eldoc-box)
+  :ensure t
   :require t
   :config
   (if (executable-find "rust-analyzer")
@@ -159,15 +159,7 @@
               (lambda (orig-func &rest args)
                 (when (stringp (car args))
                   (setf (car args) (string-replace "\r" "" (car args))))
-                (apply orig-func args)))
-  :custom ((eldoc-box-max-pixel-width . 600)
-           (eldoc-box-max-pixel-height . 800)
-           (eldoc-box-offset . '(16 24 24))
-           (eldoc-box-fringe-use-same-bg . nil)))
-
-(leaf eldoc
-  :hook
-  (eldoc-mode-hook . eldoc-box-hover-mode))
+                (apply orig-func args))))
 
 (leaf emmet-mode
   :ensure t
@@ -252,6 +244,9 @@
   :custom ((global-hl-line-mode . t)))
 
 (leaf hugo-utils
+  :require t)
+
+(leaf imsnippet
   :require t)
 
 (leaf indent
