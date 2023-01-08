@@ -187,10 +187,6 @@
                      (let ((coding-system-for-read (if force-utf-8 'utf-8 nil)))
                        (revert-buffer 1 1 1))))))
 
-(leaf fill-column-indicator
-  :ensure t
-  :hook ((after-change-major-mode-hook . fci-mode)))
-
 (leaf frame
   :config
   (set-cursor-color "white"))
