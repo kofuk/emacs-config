@@ -25,17 +25,21 @@
 ;; Configure theme first (to avoid flicker while startup)
 (leaf modus-themes
   :doc "Set Emacs's theme to modus vivendi theme."
+  :require t
   :ensure t
   :custom ((modus-themes-italic-constructs . t)
            (modus-themes-bold-constructs . t)
-           (modus-themes-fringes . 'intense)
-           (modus-themes-paren-match . '(bold))
-           (modus-themes-region . '(bg-only))
-           (modus-themes-mode-line . '(accented borderless))
            (modus-themes-hl-line . '(intense)))
+  :setq ((modus-themes-common-palette-overrides
+          . '((border-mode-line-active unspecified)
+              (border-mode-line-inactive unspecified)
+              (bg-mode-line-active bg-blue-subtle)
+              (fg-mode-line-active fg-main)
+              (fringe bg-active)
+              (bg-region bg-active)
+              (fg-region unspecified))))
   :config
-  (modus-themes-load-themes)
-  (modus-themes-load-vivendi))
+  (modus-themes-load-theme 'modus-vivendi))
 
 (leaf all-the-icons
   :ensure t
