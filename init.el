@@ -171,6 +171,10 @@
   (web-mode-hook . emmet-mode)
   (typescript-tsx-mode-hook . emmet-mode))
 
+(leaf eshell
+  :hook
+  (eshell-mode-hook . (lambda () (company-mode -1))))
+
 (leaf filelock
   :custom ((create-lockfiles . nil)))
 
