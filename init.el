@@ -530,6 +530,11 @@
   :mode
   ("\\.clang-tidy\\'"))
 
+(leaf yasnippet
+  :ensure t
+  :config
+  (yas-global-mode 1))
+
 (leaf zig-mode
   :ensure t
   :custom ((zig-format-on-save . nil)))
