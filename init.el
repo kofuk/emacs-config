@@ -154,10 +154,7 @@
 
 (leaf eglot
   :ensure t
-  :require t
-  :config
-  (if (executable-find "rust-analyzer")
-      (add-to-list 'eglot-server-programs '(rust-mode . ("rust-analyzer"))))
+  :defer-config
   ;; Remove unneeded "\r" because it appears in doc buffer as "^M" and is annoying.
   (advice-add 'eglot--format-markup :around
               (lambda (orig-func &rest args)
@@ -222,8 +219,7 @@
   ;; Although it's Emacs' default but it doesn't used as-is because
   ;; I specified different font above.
   (set-fontset-font t 'emoji
-                    '("Noto Color Emoji" . "iso10646-1") nil 'prepend)
-  :custom ((mode-line-compact . t)))
+                    '("Noto Color Emoji" . "iso10646-1") nil 'prepend))
 
 (leaf fontset
   :if (equal system-type 'windows-nt)
@@ -472,17 +468,6 @@
 (leaf verilog-mode
   :bind ((:verilog-mode-map
           (";"))))
-
-(leaf vterm
-  :if (equal system-type 'gnu/linux)
-  :ensure t
-  :bind-keymap
-  (:vterm-mode-map
-   ("C-v")
-   ("C-v C-v" . #'vterm-send-C-v)
-   ("C-v ESC" . #'vterm-copy-mode)
-   ("C-y" . #'vterm-yank)
-   ("ESC" . #'vterm-copy-mode)))
 
 (leaf web-mode
   :ensure t
