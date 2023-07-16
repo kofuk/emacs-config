@@ -41,11 +41,11 @@
   :config
   (modus-themes-load-theme 'modus-vivendi))
 
-(leaf all-the-icons
+(leaf nerd-icons
   :ensure t
   :config
-  (unless (or (equal system-type 'windows-nt) (file-exists-p "~/.local/share/fonts/all-the-icons.ttf"))
-    (all-the-icons-install-fonts)))
+  (unless (or (equal system-type 'windows-nt) (file-exists-p "~/.local/share/fonts/NFM.ttf"))
+    (nerd-icons-install-fonts)))
 
 (leaf autoinsert
   :doc "Enable auto-insert-mode and add specific templates."
