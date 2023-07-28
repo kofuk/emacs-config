@@ -111,6 +111,7 @@
            (company-deabbrev-downcase . nil)))
 
 (leaf csharp-mode
+  :emacs< "29"
   :ensure t)
 
 (leaf cus-edit
