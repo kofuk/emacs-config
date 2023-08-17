@@ -419,6 +419,9 @@
   ;; Recognize words in camelCaseString.
   (global-subword-mode t))
 
+(leaf terraform-mode
+  :ensure t)
+
 (leaf tooltip
   :config
   (tooltip-mode -1))
