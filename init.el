@@ -348,16 +348,20 @@
   :require (cl-generic)
   :config
   (cl-defmethod project-root ((project (head golang)))
-    (car (cdr project)))
-  :hook ((project-find-functions . (lambda (directory)
-                                     (while (and directory
-                                                 (not (string= (file-name-directory directory)
-                                                               (directory-file-name directory)))
-                                                 (not (file-exists-p (concat directory "go.mod"))))
-                                       (setq directory (file-name-directory (directory-file-name directory))))
-                                     (if (file-exists-p (concat directory "go.mod"))
-                                         `(golang ,directory)
-                                       nil)))))
+    (cadr project))
+  (cl-defmethod project-root ((project (head cargo)))
+    (cadr project))
+  :hook ((project-find-functions
+          . (lambda (directory)
+              (letrec ((find-root
+                        (lambda (directory)
+                          (cond
+                           ((not directory) nil) ;; Searched to parent directory, and no project root found
+                           ((not (file-directory-p directory)) nil) ;; Not a directory
+                           ((file-exists-p (concat directory "/go.mod")) `(golang ,directory))
+                           ((file-exists-p (concat directory "/Cargo.toml")) `(cargo ,directory))
+                           (t (funcall find-root (file-name-parent-directory directory)))))))
+                (funcall find-root directory))))))
 
 (leaf remocon
   :require t
