@@ -161,7 +161,9 @@
               (lambda (orig-func &rest args)
                 (when (stringp (car args))
                   (setf (car args) (string-replace "\r" "" (car args))))
-                (apply orig-func args))))
+                (apply orig-func args)))
+  :bind (("C-c C-e C-n" . flymake-goto-next-error)
+         ("C-c C-e C-p" . flymake-goto-prev-error)))
 
 (leaf emmet-mode
   :ensure t
